@@ -1,10 +1,11 @@
-<c0x>,c0x level,unittitle,unitdate,container,number,physdesc,scopecontent,physloc
-1,series,Series I: Randolph Family of Edgehill
-2,folder,Dabney Carr: Letter about remittance; Obituary of his son ,1807; n.d.,Box-folder,1:1
-3,folder,"[Mrs. Colston] to daughter Lucy, wife of Bennett Taylor",1877 April 9,Box-folder,1:2
-4,folder,Ellen Wayles Randolph Coolidge (granddaughter of Thomas Jefferson) to Jane Nicholas Randolph about trip with little Pat,n.d.,Box-folder,1:3
-5,file,Page coat of arms drawing,n.d.,,,,,oversize
-2,file,gavel; tweezer; blue glass; stamps; uniform braid; locket of Dr. Edward Alexander; bone carved object; coral earrings,n.d.,,,,,minitrays
-1,series,Series II: Dickins Family Papers
-2,file,Asbury Dickins correspondence,1834; [1861],Box-folder,2:1
-2,file,Francis Asbury Dickins correspondence,1859; 1874; 1876,Box-folder,2:2
+num,titleproper,guide date,bioghist,scopecontent,acqinfo,<c0x>,c0x level,unittitle,unitdate,container,number,physdesc,scopecontent,physloc
+5295-c,A Guide to the John Esten Cocke Collection,12-May-65,,,Purchased 1 February 1965,,,,,,,,,
+,,,,,,1,series,Series I: Randolph Family of Edgehill
+,,,,,,2,folder,Dabney Carr: Letter about remittance; Obituary of his son ,1807; n.d.,Box-folder,1:1
+,,,,,,3,folder,"[Mrs. Colston] to daughter Lucy, wife of Bennett Taylor",1877 April 9,Box-folder,1:2
+,,,,,,4,folder,Ellen Wayles Randolph Coolidge (granddaughter of Thomas Jefferson) to Jane Nicholas Randolph about trip with little Pat,n.d.,Box-folder,1:3
+,,,,,,5,file,Page coat of arms drawing,n.d.,,,,,oversize
+,,,,,,2,file,gavel; tweezer; blue glass; stamps; uniform braid; locket of Dr. Edward Alexander; bone carved object; coral earrings,n.d.,,,,,minitrays
+,,,,,,1,series,Series II: Dickins Family Papers
+,,,,,,2,file,Asbury Dickins correspondence,1834; [1861],Box-folder,2:1
+,,,,,,2,file,Francis Asbury Dickins correspondence,1859; 1874; 1876,Box-folder,2:2

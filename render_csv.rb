@@ -119,19 +119,19 @@ def self.file2loh(file)
     
     # Save collection info in columns to the left of c0x.
     collection_data = ss.first() # row 2
-    cols.each_index { |col_num|
+    collection_data.each_index { |col_num|
       if names[col_num] == '<c0x>'
         break
       end
-      coll_hr[names[col_num]] = cols[col_num]
+      coll_hr[names[col_num]] = collection_data[col_num]
     }
 
     # Turn the CSV data into a list of hashes.
     # first() is like pop. Finding aid starts in row 3.
-    while (cols = ss.first())
+    while (collection_data = ss.first())
       rh = Hash.new()
-      cols.each_index { |col_num|
-        rh[names[col_num]] = cols[col_num]
+      collection_data.each_index { |col_num|
+        rh[names[col_num]] = collection_data[col_num]
       }
       loh.push(rh)
     end

@@ -15,11 +15,22 @@
 # implied.  See the License for the specific language governing
 # permissions and limitations under the License.
 
+
+This package is basically a single Ruby script that reads .csv or
+.xlsx with a certain column layout, and creates EAD xml.
+
+
+todo
+
+
 Q If an element is empty must we render it as <empty/> or can we use
 <empty></empty> ?
 
+A xmllint seems to change empty elements into the self-closing variant.
 
-- send xml output throught xmllint --format to do pretty formatting.
+- send xml output throught xmllint --format to do pretty formatting,
+  but make sure the people we give the xml to can parse self closing
+  elements.
 
 - show_csv.rb add printf max width formatting for name.
 
