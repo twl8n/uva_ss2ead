@@ -1,0 +1,187 @@
+<?xml-stylesheet href="http://ead.lib.virginia.edu/vivaead/published/document.xsl" type="text/xsl"?>
+<ead id=''>
+    <eadheader audience='internal' langencoding='iso639-2b' findaidstatus='edited-partial-draft'>
+        <eadid countrycode='US' mainagencycode='ViU'>PUBLIC "-//University of Virginia::Library::Special Collections//TEXT (US::ViU::::A Guide to the , )//EN" ".xml" </eadid>
+        <filedesc>
+            <titlestmt>
+                <titleproper>
+                    A Guide to the ,
+                    <date/>
+                </titleproper>
+                <subtitle id='sort'>
+                    <num type='collectionnumber'/>
+                </subtitle>
+            </titlestmt>
+            <publicationstmt>
+                <publisher>Special Collections, University of Virginia Library </publisher>
+                <address>
+<addressline>Special Collections </addressline>
+<addressline>University of Virginia Library </addressline>
+<addressline>Charlottesville, Virginia 22904-4110 </addressline>
+<addressline>USA </addressline>
+<addressline>Phone: (434) 243-1776 </addressline>
+<addressline>Fax: (434) 924-4968 </addressline>
+<addressline>Email: mssbks@virginia.edu </addressline>
+<addressline>URL: http://www.lib.virginia.edu/small </addressline>
+</address>
+                <date type='publication'> 2011 By the Rector and Visitors of the University of Virginia. All rights reserved. </date>
+                <p id='usestatement'>
+                    <extref entityref='conditions'>Conditions of Use </extref>
+                </p>
+            </publicationstmt>
+        </filedesc>
+        <profiledesc>
+            <creation>
+                Machine-readable finding aid derived from MS Word, created by ,
+                <date/>
+            </creation>
+            <langusage>
+                Description is in
+                <language langcode='eng'>English </language>
+            </langusage>
+        </profiledesc>
+    </eadheader>
+    <frontmatter>
+        <titlepage>
+            <titleproper>
+                A Guide to the ,
+                <date/>
+            </titleproper>
+            <subtitle>
+                A Collection in
+                <lb/>
+                Special Collections
+                <lb/>
+                The University of Virginia Library
+                <num type='Accession Number'/>
+            </subtitle>
+            <p id='logostmt'>
+                <extptr actuate='onload' show='embed' entityref='logo'/>
+            </p>
+            <publisher>Special Collections, University of Virginia Library </publisher>
+            <date type='publication'>2011 </date>
+            <list type='simple'>
+                <head>Contact Information:</head>
+                <item>Special Collections</item>
+                <item>P.O. Box 400110</item>
+                <item>University of Virginia</item>
+                <item>Charlottesville, Virginia 22904-4110</item>
+                <item>USA</item>
+                <item>Phone: (434) 243-1776</item>
+                <item>Fax: (434) 924-4968</item>
+                <item id='contact'>
+                    <extref href='http://www.lib.virginia.edu/small/about/contact.html'>Contact information</extref>
+                </item>
+                <item>
+                    URL:
+                    <extref href='http://www.lib.virginia.edu/small'>http://www.lib.virginia.edu/small</extref>
+                </item>
+            </list>
+            <list type='deflist'>
+                <defitem>
+                    <label>Processed by: </label>
+                    <item>Special Collections Staff </item>
+                </defitem>
+            </list>
+        </titlepage>
+    </frontmatter>
+    <archdesc level='collection'>
+        <runner placement='footer'>Special Collections, University of Virginia Library </runner>
+        <did>
+            <head>Descriptive Summary </head>
+            <repository label='Repository' encodinganalog='852$a'>Special Collections, University of Virginia Library </repository>
+            <unittitle label='Title' encodinganalog='245$a'>
+                <unitdate type='inclusive' label='Date' encodinganalog='245$f'/>
+            </unittitle>
+            <unitid label='Accession Number' encodinganalog='099$a'/>
+            <physloc label=''/>
+            <physdesc label='Physical Characteristics' encodinganalog='300$a'/>
+            <langmaterial label='Language'>
+                <language langcode='eng'>English </language>
+            </langmaterial>
+        </did>
+        <descgrp type='admininfo'>
+            <head>Administrative Information </head>
+            <accessrestrict encodinganalog='506$a'>
+                <head>Access Restrictions </head>
+                <p>There are no restrictions. </p>
+            </accessrestrict>
+            <userestrict encodinganalog='540$a'>
+                <head>Use Restrictions </head>
+                <p>There are no restrictions. </p>
+            </userestrict>
+            <prefercite encodinganalog='524$a'>
+                <head>Preferred Citation </head>
+                <p>, Accession #, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
+            </prefercite>
+            <acqinfo encodinganalog='541$a'>
+                <head>Acquisition Information </head>
+                <p/>
+            </acqinfo>
+        </descgrp>
+        <bioghist encodinganalog='545$a'>
+            <head>Biographical/Historical Information </head>
+            <p/>
+        </bioghist>
+        <scopecontent encodinganalog='520$a'>
+            <head>Scope and Content </head>
+            <p/>
+        </scopecontent>
+        <arrangement encodinganalog='351'>
+            <head>Arrangement </head>
+            <p/>
+        </arrangement>
+        <dsc type='combined'>
+            <head>Contents List </head>
+            <c01 level='series'>
+                <did>
+                    <unittitle label=''>
+                        <unitdate type='inclusive'/>
+                    </unittitle>
+                    <physloc/>
+                    <container label='' type=''/>
+                    <physdesc/>
+                </did>
+                <scopecontent>
+                    <p/>
+                </scopecontent>
+                <arrangement>
+                    <p/>
+                </arrangement>
+                <c02 level='subseries'>
+                    <did>
+                        <unittitle label=''>
+                            <unitdate type='inclusive'/>
+                        </unittitle>
+                        <physloc/>
+                        <container label='' type=''/>
+                        <physdesc/>
+                    </did>
+                    <scopecontent>
+                        <p/>
+                    </scopecontent>
+                    <arrangement>
+                        <p/>
+                    </arrangement>
+                    <c03 level='item'>
+                        <did>
+                            <unittitle label=''>
+                                <unitdate type='inclusive'/>
+                            </unittitle>
+                            <physloc/>
+                            <container label='' type=''/>
+                            <physdesc/>
+                        </did>
+                        <scopecontent>
+                            <p/>
+                        </scopecontent>
+                        <arrangement>
+                            <p/>
+                        </arrangement>
+                    </c03>
+                </c02>
+            </c01>
+        </dsc>
+    </archdesc>
+</ead>
+

@@ -1,0 +1,66 @@
+<dsc type="combined">
+    <head>Contents List </head>
+    <c01 level="series">
+        <did>
+            <unittitle label="series">Series I: Henry James Correspondence<unitdate
+                type="inclusive"/>
+            </unittitle>
+            <physloc/>
+            <container label="" type=""/>
+            <physdesc/>
+        </did>
+        <scopecontent>
+            <p/>
+        </scopecontent>
+        <arrangement>
+            <p/>
+        </arrangement>
+        <c02 level="subseries">
+            <did>
+                <unittitle label="">Subseries A: Dated Correspondence
+                    <unitdate type="inclusive"></unitdate></unittitle>
+                <physloc/>
+                <container label="" type=""/>
+                <physdesc/>
+            </did>
+            <scopecontent>
+                <p/>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        <c03 level="item">
+            <did>
+                <unittitle label="">Henry James to W[endell] P[hillips] Garrison
+                    <unitdate type="inclusive"/>[1872?] December 14</unittitle>
+                <physloc/>
+                <container label="Box-folder" type="box-folder">1:1</container>
+                <physdesc>ALS, 2 pp. on 1 l.</physdesc>
+            </did>
+            <scopecontent>
+                <p>James, Paris, encloses a review [not present] of George Eliot's Middlemarch for publishing in The Nation and discusses various pieces for publication, including writings on Parisian stage, Henri Regnault, Auguste Laugel, and a journey to Italy</p>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        </c03>
+        <c03 level="item">
+            <did>
+                <unittitle label="">[Henry James] to Mr. Osgood
+                    <unitdate type="inclusive">[1876] March 7</unitdate></unittitle>
+                <physloc/>
+                <container label="Box-folder" type="box-folder">1:2</container>
+                <physdesc>ANS, 1 p. on 1 l. with typed transcript.</physdesc>
+            </did>
+            <scopecontent>
+                <p>Here is another batch of The American copy. There are 30 pages more of the Atlantic to send him, which shall go as soon as possible. </p>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+            </c03>
+        </c02>
+    </c01>
+</dsc>
+
+

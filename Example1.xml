@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dsc type="combined">
+    <head>Contents List</head>
+    <c01 level="series">
+        <did>
+            <unittitle label="series">Series I: Randolph Family of Edgehill <unitdate
+                    type="inclusive"/>
+            </unittitle>
+            <physloc/>
+            <container label="" type=""/>
+            <physdesc/>
+        </did>
+        <scopecontent>
+            <p/>
+        </scopecontent>
+        <arrangement>
+            <p/>
+        </arrangement>
+        <c02 level="file">
+            <did>
+                <unittitle label="">Dabney Carr: Letter about remittance; Obituary of his son
+                        <unitdate type="inclusive">1807; n.d.</unitdate></unittitle>
+                <physloc/>
+                <container label="Box-folder" type="box-folder">1:1</container>
+                <physdesc/>
+            </did>
+            <scopecontent>
+                <p/>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        </c02>
+        <c02 level="file">
+            <did>
+                <unittitle label="">[Mrs. Colston] to daughter Lucy, wife of Bennett Taylor
+                        <unitdate type="inclusive">1877 April 9</unitdate></unittitle>
+                <physloc/>
+                <container label="Box-folder" type="box-folder">1:2</container>
+                <physdesc/>
+            </did>
+            <scopecontent>
+                <p/>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        </c02>
+        <c02 level="file">
+            <did>
+                <unittitle label="">Ellen Wayles Randolph Coolidge (granddaughter of Thomas Jefferson) to Jane Nicholas Randolph about trip with little Pat
+                        <unitdate type="inclusive">n.d.</unitdate></unittitle>
+                <physloc/>
+                <container label="Box-folder" type="box-folder">1:3</container>
+                <physdesc/>
+            </did>
+            <scopecontent>
+                <p/>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        </c02>
+        <c02 level="file">
+            <did>
+                <unittitle label="">Page coat of arms drawing
+                    <unitdate type="inclusive">n.d.</unitdate></unittitle>
+                <physloc>>oversize</physloc>
+                <container label="" type=""/>
+                <physdesc/>
+            </did>
+            <scopecontent>
+                <p/>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        </c02>
+        <c02 level="file">
+            <did>
+                <unittitle label="">gavel; tweezer; blue glass; stamps; uniform braid; locket of Dr. Edward Alexander; bone carved object; coral earrings
+                    <unitdate type="inclusive">n.d.</unitdate></unittitle>
+                <physloc>>minitrays</physloc>
+                <container label="" type=""/>
+                <physdesc/>
+            </did>
+            <scopecontent>
+                <p/>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        </c02>
+    </c01>
+    <c01 level="series">
+        <did>
+            <unittitle label="">Series II: Dickins Family Papers</unittitle>
+        <physloc/>
+        <container label="" type=""/>
+        <physdesc/>
+        </did>
+        <scopecontent>
+            <p/>
+        </scopecontent>
+        <arrangement>
+            <p/>
+        </arrangement>
+        <c02 level="file">
+            <did>
+                <unittitle label="">Asbury Dickins correspondence
+                    <unitdate type="inclusive">1834; [1861]</unitdate></unittitle>
+                <physloc/>
+                <container label="Box-folder" type="box-folder">2:1</container>
+                <physdesc/>
+            </did>
+            <scopecontent>
+                <p/>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        </c02>
+        <c02 level="file">
+            <did>
+                <unittitle label="">Francis Asbury Dickins correspondence
+                    <unitdate type="inclusive">1859; 1874; 1876</unitdate></unittitle>
+                <physloc/>
+                <container label="Box-folder" type="box-folder">2:2</container>
+                <physdesc/>
+            </did>
+            <scopecontent>
+                <p/>
+            </scopecontent>
+            <arrangement>
+                <p/>
+            </arrangement>
+        </c02>
+    </c01>
+</dsc>
