@@ -29,6 +29,7 @@ def self.dumploh(loh, label, names)
 end
 
 def self.file2loh(file)
+  special_row_2 = false
   loh = []
   coll_hr = Hash.new
   if file.match(/\.csv/i)
@@ -60,7 +61,7 @@ def self.file2loh(file)
   elsif file.match(/\.xlsx/i)
     ss = Excelx.new(file)
     names = ss.row(1)
-
+    
     # Headers in row 1, collection data in row 2, finding aid starts in row 3
     
     if (special_row_2)
@@ -71,9 +72,13 @@ def self.file2loh(file)
         coll_hr[names[col_num]] = ss.row(2)[col_num]
         print "collection  #{names[col_num]}: #{coll_hr[names[col_num]]}\n"
       }
+      data_row = 3
+    else
+      data_row = 2
     end
 
-    for row_num in 3..ss.last_row()
+
+    for row_num in data_row..ss.last_row()
       rh = Hash.new()
       ss.row(row_num).each_index { |col_num|
         rh[names[col_num]] = ss.row(row_num)[col_num]
