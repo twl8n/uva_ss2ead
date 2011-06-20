@@ -25,6 +25,22 @@ generated during processing the spread sheet rows.
 
 change notes
 
+x <ead id="#{coll_hr['num']}">  vui is the num. vui also occurs in file name.
+
+x show_csv.rb add printf max width formatting for name and add ability
+  to read xlsx.
+
+Q If an element is empty must we render it as <empty/> or can we use
+<empty></empty> ?
+
+A xmllint seems to change empty elements into the self-closing variant.
+
+x add "num" to Accession # in prefercite
+
+x fix both instances of <num> to use collection_num column
+
+x add <head>Conents List</head> as first line of <dcs>
+
 x put sample input and output from "steady" ruby and nokogiri converter into ./steady/
 
 x simple erb text template_1.erb

@@ -7,7 +7,7 @@
       <titlestmt>
         <titleproper>
           A Guide to the<%= coll_hr['titleproper'] %>
-          <date><%= coll_hr['collection date'] %></date>
+          <date><%= coll_hr['guide date'] %></date>
         </titleproper>
         <subtitle id="sort">
           <num type="collectionnumber"><%= coll_hr['num'] %></num>
@@ -46,7 +46,7 @@
     <titlepage>
       <titleproper>
         <%= coll_hr['titleproper'] %>
-        <date><%= coll_hr['collection date'] %></date>
+        <date><%= coll_hr['guide date'] %></date>
       </titleproper>
       <subtitle>
         A Collection in
@@ -113,7 +113,7 @@
       </userestrict>
       <prefercite encodinganalog="524$a">
         <head>Preferred Citation </head>
-        <p>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
+        <p><%= coll_hr['titleproper'] %>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
       </prefercite>
       <acqinfo encodinganalog="541$a">
         <head>Acquisition Information </head>
@@ -126,7 +126,7 @@
     </bioghist>
     <scopecontent encodinganalog="520$a">
       <head>Scope and Content </head>
-      <p><%= coll_hr['scopecontent'] %></p>
+      <p><%= coll_hr['guide_scopecontent'] %></p>
     </scopecontent>
     <arrangement encodinganalog="351">
       <head>Arrangement </head>
