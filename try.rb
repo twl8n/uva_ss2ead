@@ -1,8 +1,16 @@
 #!/usr/bin/env ruby
 
-
+require 'csv'
 require 'rubygems'
+require 'csv'
+require 'erb'
 require 'roo'
+require 'find'
+
+print "done\n"
+
+exit
+
 
 # ss = Excelx.new("/home/twl8n/dcs_finding_aids/ContentsSamplesJun10/MSS5295-c.xlsx")
 ss = Excelx.new(ARGV[0])

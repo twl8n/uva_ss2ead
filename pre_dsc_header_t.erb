@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="http://ead.lib.virginia.edu/vivaead/published/document.xsl" type="text/xsl"?>
-<ead id="">
+<ead id="<%= coll_hr['num'] %>">
   <eadheader audience="internal" langencoding="iso639-2b" findaidstatus="edited-partial-draft">
     <eadid countrycode="US" mainagencycode="ViU">PUBLIC "-//University of Virginia::Library::Special Collections//TEXT (US::ViU::::A Guide to the , )//EN" ".xml" </eadid>
     <filedesc>
       <titlestmt>
         <titleproper>
-          <%= coll_hr['titleproper'] %>
-          <date><%= coll_hr['guide date'] %></date>
+          A Guide to the<%= coll_hr['titleproper'] %>
+          <date><%= coll_hr['collection date'] %></date>
         </titleproper>
         <subtitle id="sort">
           <num type="collectionnumber"><%= coll_hr['num'] %></num>
@@ -33,7 +33,7 @@
     </filedesc>
     <profiledesc>
       <creation>
-        Machine-readable finding aid created by uva_csv2ead, a Ruby script.
+        Machine-readable finding aid created by uva_ss2ead, a Ruby script.
         <date/>
       </creation>
       <langusage>
@@ -46,7 +46,7 @@
     <titlepage>
       <titleproper>
         <%= coll_hr['titleproper'] %>
-        <date><%= coll_hr['guide date'] %></date>
+        <date><%= coll_hr['collection date'] %></date>
       </titleproper>
       <subtitle>
         A Collection in
@@ -54,7 +54,7 @@
         Special Collections
         <lb/>
         The University of Virginia Library
-        <num type="Accession Number"/>
+        <num type="Accession Number"><%= coll_hr['num'] %></num>
       </subtitle>
       <p id="logostmt">
         <extptr actuate="onload" show="embed" entityref="logo"/>
@@ -113,7 +113,7 @@
       </userestrict>
       <prefercite encodinganalog="524$a">
         <head>Preferred Citation </head>
-        <p>, Accession #, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
+        <p>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
       </prefercite>
       <acqinfo encodinganalog="541$a">
         <head>Acquisition Information </head>
@@ -133,6 +133,7 @@
       <p/>
     </arrangement>
     <dsc>
+      <head>Conents List</head>
       <%= dsc %>
     </dsc>
   </archdesc>

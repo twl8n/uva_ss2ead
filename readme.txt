@@ -19,22 +19,11 @@
 This package is basically a single Ruby script that reads .csv or
 .xlsx with a certain column layout, and creates EAD xml.
 
+<%= dsc %> in pre_dsc_header_t.erb comes from the content hash value in the list of hashes
+generated during processing the spread sheet rows.
 
-todo
 
-
-Q If an element is empty must we render it as <empty/> or can we use
-<empty></empty> ?
-
-A xmllint seems to change empty elements into the self-closing variant.
-
-- send xml output throught xmllint --format to do pretty formatting,
-  but make sure the people we give the xml to can parse self closing
-  elements.
-
-- show_csv.rb add printf max width formatting for name.
-
-+ render_csv.rb and template sample_1_t.erb to render first_example.csv
+change notes
 
 x put sample input and output from "steady" ruby and nokogiri converter into ./steady/
 
