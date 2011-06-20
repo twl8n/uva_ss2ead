@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+# Created by Tom Laudeman
+
+# Copyright 2011 University of Virginia
+
 require 'csv'
 require 'rubygems'
 require 'csv'
@@ -15,17 +19,19 @@ def self.dumploh(loh, label, names)
       max_nsize = item.size
     end
   }
-  print "--- #{label}\n"
+
   while xx < loh.size
     href = loh[xx]
     names.each_index { |yy|
       fmt = "%+#{max_nsize}.#{max_nsize}s"
-      printf("%02d %02d #{fmt}: %s\n", xx, yy, names[yy], href[names[yy]])
+      # Show row and col numbers as one-based since they are counting
+      # numbers, not array indices.
+      printf("%02d %02d #{fmt}: %s\n", xx+1, yy+1, names[yy], href[names[yy]])
     }
     print "\n"
     xx += 1
   end
-  print "---\n\n"
+
 end
 
 def self.file2loh(file)
@@ -77,7 +83,6 @@ def self.file2loh(file)
       data_row = 2
     end
 
-
     for row_num in data_row..ss.last_row()
       rh = Hash.new()
       ss.row(row_num).each_index { |col_num|
@@ -96,39 +101,4 @@ end
 # Unbuffer output.
 STDOUT.sync = true
 
-print "starting\n"
 loh, coll_hr, names = file2loh(ARGV[0])
-
-# loh.each { |href|
-  
-#   names.each_index  { |xx|
-#     print "#{names[xx]}: (#{href.object_id()}) #{href[names[xx]]}\n"
-#   }
-
-# }
-
-if false
-  var = CSV.open(ARGV[0], 'r')
-  
-  col_names = var.first()
-
-  # puts var.public_methods.sort.inspect
-
-  if true
-    var.collect.each_with_index { |row,yy|
-      
-      col_names.each_with_index { |name,xx|
-        
-        print "#{yy} #{name}: #{row[xx]}\n"
-        
-        # row.each_with_index { |cell,xx|
-        #   print "#{yy} #{col_names[xx]}: #{cell}\n"
-        # }
-      }
-      print "\n"
-    }
-  end
-
-  #template = ERB.new File.new("simple_1_t.erb").read, nil, "%"
-  #print template.result(binding)
-end
