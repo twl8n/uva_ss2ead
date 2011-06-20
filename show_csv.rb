@@ -36,16 +36,18 @@ def self.file2loh(file)
     # column names
     names = ss.first() # row 1
     
-    # Save collection info in columns to the left of c0x.
-    collection_data = ss.first() # row 2
-    collection_data.each_index { |col_num|
-      # Only process data columns before <c0x>. 
-      if names[col_num] == '<c0x>'
-        break
-      end
-      coll_hr[names[col_num]] = collection_data[col_num]
-    }
-
+    if (special_row_2)
+      # Save collection info in columns to the left of c0x.
+      collection_data = ss.first() # row 2
+      collection_data.each_index { |col_num|
+        # Only process data columns before <c0x>. 
+        if names[col_num] == '<c0x>'
+          break
+        end
+        coll_hr[names[col_num]] = collection_data[col_num]
+      }
+    end
+      
     # Turn the CSV data into a list of hashes.
     # first() is like pop. Finding aid starts in row 3.
     while (collection_data = ss.first())
@@ -61,13 +63,15 @@ def self.file2loh(file)
 
     # Headers in row 1, collection data in row 2, finding aid starts in row 3
     
-    ss.row(2).each_index { |col_num|
-      if names[col_num] == '<c0x>'
-        break
-      end
-      coll_hr[names[col_num]] = ss.row(2)[col_num]
-      print "collection  #{names[col_num]}: #{coll_hr[names[col_num]]}\n"
-    }
+    if (special_row_2)
+      ss.row(2).each_index { |col_num|
+        if names[col_num] == '<c0x>'
+          break
+        end
+        coll_hr[names[col_num]] = ss.row(2)[col_num]
+        print "collection  #{names[col_num]}: #{coll_hr[names[col_num]]}\n"
+      }
+    end
 
     for row_num in 3..ss.last_row()
       rh = Hash.new()
