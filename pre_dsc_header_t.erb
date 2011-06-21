@@ -2,11 +2,11 @@
 <?xml-stylesheet href="http://ead.lib.virginia.edu/vivaead/published/document.xsl" type="text/xsl"?>
 <ead id="<%= coll_hr['num'] %>">
   <eadheader audience="internal" langencoding="iso639-2b" findaidstatus="edited-partial-draft">
-    <eadid countrycode="US" mainagencycode="ViU">PUBLIC "-//University of Virginia::Library::Special Collections//TEXT (US::ViU::::A Guide to the , )//EN" ".xml" </eadid>
+    <eadid countrycode="US" mainagencycode="ViU">PUBLIC "-//University of Virginia::Library::Special Collections//TEXT (US::ViU::::A Guide to the <%= coll_hr['titleproper'] %>, )//EN" "<%= coll_hr['xml_name'] %>" </eadid>
     <filedesc>
       <titlestmt>
         <titleproper>
-          A Guide to the<%= coll_hr['titleproper'] %>
+          A Guide to the <%= coll_hr['titleproper'] %>
           <date><%= coll_hr['guide date'] %></date>
         </titleproper>
         <subtitle id="sort">
@@ -25,7 +25,7 @@
           <addressline>Email: mssbks@virginia.edu </addressline>
           <addressline>URL: http://www.lib.virginia.edu/small </addressline>
         </address>
-        <date type="publication"> 2011 By the Rector and Visitors of the University of Virginia. All rights reserved. </date>
+        <date type="publication">2011 By the Rector and Visitors of the University of Virginia. All rights reserved. </date>
         <p id="usestatement">
 	  <extref entityref="conditions">Conditions of Use </extref>
         </p>
@@ -33,7 +33,7 @@
     </filedesc>
     <profiledesc>
       <creation>
-        Machine-readable finding aid created by uva_ss2ead, a Ruby script.
+        Machine-readable finding aid created by uva_ss2ead/render_ss.rb, a Ruby script.
         <date/>
       </creation>
       <langusage>
@@ -60,7 +60,7 @@
         <extptr actuate="onload" show="embed" entityref="logo"/>
       </p>
       <publisher>Special Collections, University of Virginia Library </publisher>
-      <date type="publication">2011 </date>
+      <date type="publication">2011</date>
       <list type="simple">
         <head>Contact Information:</head>
         <item>Special Collections</item>
@@ -126,7 +126,7 @@
     </bioghist>
     <scopecontent encodinganalog="520$a">
       <head>Scope and Content </head>
-      <p><%= coll_hr['guide_scopecontent'] %></p>
+      <p><%= coll_hr['guide_scope'] %></p>
     </scopecontent>
     <arrangement encodinganalog="351">
       <head>Arrangement </head>

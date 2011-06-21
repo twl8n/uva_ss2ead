@@ -176,10 +176,15 @@ def self.work(file)
   loh, coll_hr = file2loh(file)
   r_flag, dsc = proc_rows(loh, @cox_t)
   if (r_flag)
-    # coll_hr must be defined and valid for outer_t.
-    xml = @outer_t.result(binding())
     base = File.basename(file,File.extname(file)) 
     new_name = "#{base}.xml"
+
+    # Write/overwrite the xml file name into a hash value for each iteration.
+    coll_hr['xml_name'] = new_name
+
+    # coll_hr must be defined and valid for outer_t.
+    xml = @outer_t.result(binding())
+
     if File.exists?(new_name)
       File.rename(new_name, "#{new_name}.bak")
     end
