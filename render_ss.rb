@@ -22,19 +22,7 @@
 # Working version. Correct order and nesting.
 # ./render_csv.rb second_example.csv | xmllint --format - | less
 
-require 'rubygems'
-require 'csv'
-require 'erb'
-require 'roo'
-require 'find'
 require 'lib/util'
-require 'sqlite3'
-
-Rmatic_db = "rmatic.db"
-Msg_schema = "msg_schema.sql"
-Orig = "/home/twl8n/dcs_finding_aids"
-
-Home = File.dirname(File.expand_path(__FILE__))
 
 # def self.work(file)
   

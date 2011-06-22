@@ -1,15 +1,19 @@
 
-require 'rubygems'
-require 'csv'
-require 'roo'
-require 'find'
 require 'util' # our local utility methods
 
-Rmatic_db = "rmatic.db"
-Msg_schema = "msg_schema.sql"
-Orig = "/home/twl8n/dcs_finding_aids"
 
 class SsConvController < ApplicationController
+  
+  def root_url
+    if ! defined?(request)
+      return '/'
+    end
+    uri = request.request_uri
+    if (uri.match(/uva_ss2ead/))
+      return '/uva_ss2ead'
+    end
+    return '/'
+  end
 
   # constants and config?
   # any admin functions?
@@ -107,6 +111,7 @@ class SsConvController < ApplicationController
     @mdo.set_message("Viewing successful", true) #append
     @message = @mdo.get_message()
     @mdo.set_message("", false) # clear the message
+    @index_url = root_url()
   end
 
   def index

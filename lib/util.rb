@@ -1,5 +1,17 @@
 
+
 require 'erb'
+require 'rubygems'
+require 'csv'
+require 'roo'
+require 'find'
+require 'sqlite3'
+
+C_list = ["box", "folder", "box-folder", "carton", "reel", "frame", "reel-frame", "volume", "folio", "page", "sleeve", "oversize", "map-case", "drawer"]
+Home = "/home/twl8n/uva_ss2ead"
+Msg_schema = "msg_schema.sql"
+Orig = "/home/twl8n/dcs_finding_aids"
+Rmatic_db = "rmatic.db"
 
 class Ss_converter
 
@@ -65,7 +77,7 @@ class Ss_converter
     # elements of ead, make sure our output files doesn't exist,
     # write the output.
 
-    loh, coll_hr = file2loh(file)
+    loh, coll_hr, f2l_message = file2loh(file)
     r_flag, dsc = proc_rows(loh, @cox_t)
     if (r_flag)
       base = File.basename(file,File.extname(file)) 
@@ -89,6 +101,10 @@ class Ss_converter
       message = "Error: processing #{file}"
     end
     mdo.set_message("Complete: processing #{file}", true)
+    if ! f2l_message.empty?
+      mdo.set_message(f2l_message, true)
+      message.concat(f2l_message)
+    end
     return message
   end
 
@@ -143,6 +159,8 @@ class Ss_converter
   end
 
   def self.file2loh(file)
+    message = ""
+    cm_flag = false
     loh = []
     coll_hr = Hash.new
     data = []
@@ -179,21 +197,39 @@ class Ss_converter
       rh = Hash.new()
       row = data[xx_dex]
       row.each_index { |col_num|
-        if names[col_num] == 'container' and row[col_num].to_s.length == 0
-          row[col_num] = "unknown"
-        end
         rh[names[col_num]] = row[col_num]
+
+        if rh['container'].to_s.empty?
+          rh['container'] = ""
+          # rh['container'] = "unknown"
+        end
+
         # The roo code is converting an number into a float, so 1
         # becomes 1.0 which is amusing. Force the number to be a string.
         rh['component'] = sprintf("%d", rh['component'])
+
+        rh['container_label'] = rh['container'].capitalize
+        rh['container_type'] = rh['container'].downcase
+        
+        if ! cm_flag &&
+            ! rh['container'].empty? &&
+            ! C_list.member?(rh['container'].downcase)
+          cm_flag = true
+          message.concat("#{rh['num']} containter value \"#{rh['container']}\" not in list\n")
+        end
+
       }
       loh.push(rh)
     end
     # dumploh(loh, "pre", names)
-    return [loh, coll_hr]
+    return [loh, coll_hr, message]
   end
 
 end # class Ss_converter
+
+def container_list
+
+end
 
 def get_remote_host
   return request.remote_host
