@@ -10,28 +10,39 @@ require 'csv'
 require 'erb'
 require 'roo'
 require 'find'
+require 'lib/util'
 
-def self.dumploh(loh, label, names)
-  xx = 0
-  max_nsize = 0
-  names.each { |item|
-    if (item.size > max_nsize)
-      max_nsize = item.size
+# def self.dumploh(loh, label, names)
+#   xx = 0
+#   max_nsize = 0
+#   names.each { |item|
+#     if (item.size > max_nsize)
+#       max_nsize = item.size
+#     end
+#   }
+
+#   while xx < loh.size
+#     href = loh[xx]
+#     names.each_index { |yy|
+#       fmt = "%+#{max_nsize}.#{max_nsize}s"
+#       # Show row and col numbers as one-based since they are counting
+#       # numbers, not array indices.
+#       printf("%02d %02d #{fmt}: %s\n", xx+1, yy+1, names[yy], href[names[yy]])
+#     }
+#     print "\n"
+#     xx += 1
+#   end
+
+# end
+
+def self.fix_col_names(names)
+  names.each_index { |xx|
+    if names[xx].eql?('<c0x>')
+      names[xx] = 'component'
+      break;
     end
   }
-
-  while xx < loh.size
-    href = loh[xx]
-    names.each_index { |yy|
-      fmt = "%+#{max_nsize}.#{max_nsize}s"
-      # Show row and col numbers as one-based since they are counting
-      # numbers, not array indices.
-      printf("%02d %02d #{fmt}: %s\n", xx+1, yy+1, names[yy], href[names[yy]])
-    }
-    print "\n"
-    xx += 1
-  end
-
+  return names
 end
 
 def self.file2loh(file)
@@ -42,13 +53,14 @@ def self.file2loh(file)
     ss = CSV.open(file, 'r')
     # column names
     names = ss.first() # row 1
+    names = fix_col_names(names)
     
     if (special_row_2)
-      # Save collection info in columns to the left of c0x.
+      # Save collection info in columns to the left of component.
       collection_data = ss.first() # row 2
       collection_data.each_index { |col_num|
-        # Only process data columns before <c0x>. 
-        if names[col_num] == '<c0x>'
+        # Only process data columns before component. 
+        if names[col_num] == 'component'
           break
         end
         coll_hr[names[col_num]] = collection_data[col_num]
@@ -67,12 +79,13 @@ def self.file2loh(file)
   elsif file.match(/\.xlsx/i)
     ss = Excelx.new(file)
     names = ss.row(1)
+    names = fix_col_names(names)
     
     # Headers in row 1, collection data in row 2, finding aid starts in row 3
     
     if (special_row_2)
       ss.row(2).each_index { |col_num|
-        if names[col_num] == '<c0x>'
+        if names[col_num] == 'component'
           break
         end
         coll_hr[names[col_num]] = ss.row(2)[col_num]
@@ -89,12 +102,12 @@ def self.file2loh(file)
         rh[names[col_num]] = ss.row(row_num)[col_num]
         # The roo code is converting an number into a float, so 1
         # becomes 1.0 which is amusing. Force the number to be a string.
-        rh['<c0x>'] = sprintf("%d", rh['<c0x>'])
+        rh['component'] = sprintf("%d", rh['component'])
       }
       loh.push(rh)
     end
   end
-  dumploh(loh, "pre", names)
+  Ss_converter.dumploh(loh, "pre", names)
   return [loh, coll_hr, names]
 end
 

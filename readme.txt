@@ -25,6 +25,9 @@ generated during processing the spread sheet rows.
 
 change notes
 
+x rename render_csv.rb to render_ss.rb, show_csv.rb to show_ss.rb
+because both can do more than just csv.
+
 x <ead id="#{coll_hr['num']}">  vui is the num. vui also occurs in file name.
 
 x show_csv.rb add printf max width formatting for name and add ability

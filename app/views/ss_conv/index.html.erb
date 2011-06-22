@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Spreadsheet to EAD converter</title>
+  </head>
+  <body>
+    <% form_tag('upload', :method => 'post', :multipart => true) do %>
+    <p>
+      <label for="upload">Upload spreadsheeet</label> : 
+      <%= file_field_tag('upload') %>
+    </p>
+    
+    <%= submit_tag "Upload" %>
+
+    <% end %>
+
+<pre><%= @message %></pre>
+    <table border="0" cellpadding="3" cellspacing="0">
+      <tr>
+	<td colspan="7">
+	  <hr>
+	</td>
+      <tr>
+	<td valign="bottom" align="center" colspan="3">Spreadsheet<hr></td>
+	<td>&nbsp;&nbsp;</td>
+	<td valign="bottom" align="center" colspan=3">EAD XML<hr></td>
+      </tr>
+      <tr>
+	<td valign="bottom">File name<hr></td>
+	<td valign="bottom">ComputingID<hr></td>
+	<td valign="bottom">View / Convert<hr></td>
+	<td>&nbsp;&nbsp;</td>
+	<td valign="bottom">File name<hr></td>
+	<td valign="bottom">Last modified<hr></td>
+	<td valign="bottom">View<hr></td>
+      </tr>
+      <%  @f_info.each { |rh| %>
+      <tr bgcolor="<%= rh[:bgcolor] %>">
+	<td valign="top">
+	  <%= rh[:orig] %> 
+	</td>
+	<td valign="top">
+	  <%= rh['computingID'] %>
+	</td>
+	<td valign="top">
+	  <a href="show_ss?ss_name=<%= rh[:orig] %>">View</a>
+	  | 
+	  <a href="convert_ss?ss_name=<%= rh[:orig] %>">Convert</a>
+	</td>
+	<td>&nbsp;&nbsp;</td>
+	<td valign="top">
+	  <% if rh[:xml_exists] %>
+	  <%= rh[:xml_fname] %>
+	  <% end %>
+	</td>
+	<td valign="top">
+	  <% if rh[:xml_exists] %>
+	  <%= rh[:xml_mtime] %> 
+	  <% end %>
+	<td valign="top">
+	  <% if rh[:xml_exists] %>
+	  <a href="show_xml?xml_fname=<%= rh[:xml_fname] %>&type=html">View XML as web page</a>
+	  | <a href="show_xml?xml_fname=<%= rh[:xml_fname] %>&type=text">View XML as text</a>
+	  <% end %>
+	</td>
+	</td>
+      </tr>
+      <% } %>
+      
+    </table>
+  </body>
+</html>

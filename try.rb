@@ -7,9 +7,21 @@ require 'erb'
 require 'roo'
 require 'find'
 
-print "done\n"
+names = 1,2,3,4
+
+names.each_index { |xx|
+  if names[xx] == 2
+    names[xx] = 5
+  end
+}
+
+names.each { |item|
+  puts item
+}
 
 exit
+
+
 
 
 # ss = Excelx.new("/home/twl8n/dcs_finding_aids/ContentsSamplesJun10/MSS5295-c.xlsx")
