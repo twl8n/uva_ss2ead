@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="http://ead.lib.virginia.edu/vivaead/published/document.xsl" type="text/xsl"?>
+<!DOCTYPE ead SYSTEM "http://text.lib.virginia.edu/bin/dtd/eadVIVA/eadVIVA.dtd" [
+<!ENTITY % xmlchar "INCLUDE">
+<!ENTITY logo SYSTEM "http://ead.lib.virginia.edu/vivaead/logos/uva-sc.jpg" NDATA jpeg>
+<!ENTITY conditions SYSTEM "http://www.lib.virginia.edu/speccol/vhp/conditions.html" NDATA html>
+<!ENTITY address SYSTEM "http://ead.lib.virginia.edu/vivaead/add_con/uva-sc_address.xml">
+<!ENTITY contact SYSTEM "http://ead.lib.virginia.edu/vivaead/add_con/uva-sc_contact.xml">
+]>
 <ead id="<%= coll_hr['num'] %>">
   <eadheader audience="internal" langencoding="iso639-2b" findaidstatus="edited-partial-draft">
     <eadid countrycode="US" mainagencycode="ViU">PUBLIC "-//University of Virginia::Library::Special Collections//TEXT (US::ViU::::A Guide to the <%= coll_hr['titleproper'] %>, )//EN" "<%= coll_hr['xml_name'] %>" </eadid>
@@ -15,16 +22,7 @@
       </titlestmt>
       <publicationstmt>
         <publisher>Special Collections, University of Virginia Library </publisher>
-        <address>
-          <addressline>Special Collections </addressline>
-          <addressline>University of Virginia Library </addressline>
-          <addressline>Charlottesville, Virginia 22904-4110 </addressline>
-          <addressline>USA </addressline>
-          <addressline>Phone: (434) 243-1776 </addressline>
-          <addressline>Fax: (434) 924-4968 </addressline>
-          <addressline>Email: mssbks@virginia.edu </addressline>
-          <addressline>URL: http://www.lib.virginia.edu/small </addressline>
-        </address>
+	&address;
         <date type="publication">2011 By the Rector and Visitors of the University of Virginia. All rights reserved. </date>
         <p id="usestatement">
 	  <extref entityref="conditions">Conditions of Use </extref>
@@ -57,27 +55,11 @@
         <num type="Accession Number"><%= coll_hr['num'] %></num>
       </subtitle>
       <p id="logostmt">
-        <extptr actuate="onload" show="embed" entityref="http://ead.lib.virginia.edu/vivaead/published/uva-sc/logo"/>
+        <extptr actuate="onload" show="embed" entityref="logo"/>
       </p>
       <publisher>Special Collections, University of Virginia Library </publisher>
       <date type="publication">2011</date>
-      <list type="simple">
-        <head>Contact Information:</head>
-        <item>Special Collections</item>
-        <item>P.O. Box 400110</item>
-        <item>University of Virginia</item>
-        <item>Charlottesville, Virginia 22904-4110</item>
-        <item>USA</item>
-        <item>Phone: (434) 243-1776</item>
-        <item>Fax: (434) 924-4968</item>
-        <item id="contact">
-          <extref href="http://www.lib.virginia.edu/small/about/contact.html">Contact information</extref>
-        </item>
-        <item>
-          URL:
-          <extref href="http://www.lib.virginia.edu/small">http://www.lib.virginia.edu/small</extref>
-        </item>
-      </list>
+      &contact;
       <list type="deflist">
         <defitem>
           <label>Processed by: </label>

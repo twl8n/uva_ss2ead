@@ -84,22 +84,30 @@ class Ss_converter
       path = File.dirname(file)
       new_name = "#{path}/#{base}.xml"
 
-      # Write/overwrite the xml file name into a hash value for each iteration.
-      coll_hr['xml_name'] = new_name
+      # Write/overwrite the xml file name into a hash value for each
+      # iteration.  This goes into the output and needs to be the name
+      # without the path.
+      coll_hr['xml_name'] = "#{base}.xml" # new_name
 
       # coll_hr must be defined and valid for outer_t.
-      xml = @outer_t.result(binding())
+      xml_output = @outer_t.result(binding())
 
-      if File.exists?(new_name)
-        File.rename(new_name, "#{new_name}.bak")
-      end
+      # if File.exists?(new_name)
+      #   File.rename(new_name, "#{new_name}.bak")
+      # end
+
+      # jun 23 2011 There is no point keeping .bak files so simply
+      # overwrite.
+
       File.open(new_name, "wb") { |my_xml|
-        my_xml.write(xml)
+        my_xml.write(xml_output)
       }
+      
       message = "Complete: processing #{file}"
     else
       message = "Error: processing #{file}"
     end
+
     mdo.set_message("Complete: processing #{file}", true)
     if ! f2l_message.empty?
       mdo.set_message(f2l_message, true)
