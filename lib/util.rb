@@ -32,7 +32,7 @@ class Ss_converter
       href = loh[xx]
       cox = href['component']
       if (cox.to_i < 1)
-        print "Must have a valid >= 1 cox"
+        print "Row #{xx+1} must have a valid >= 1 component\n"
         return [false,""]
       end
       href['content'] = ""
@@ -240,9 +240,8 @@ class Ss_converter
     my_h['component'] = unintegerize(my_h['component'])
     my_h['unitdate'] = unintegerize(my_h['unitdate'])
     
-    if my_h['container'].to_s.empty?
+    if ! defined?(my_h['container']) || my_h['container'].to_s.empty?
       my_h['container'] = ""
-      # my_h['container'] = "unknown"
     end
     
     # If c0x level is not 'series', set a flag that will be used in
@@ -253,6 +252,11 @@ class Ss_converter
     
     my_h['container_label'] = my_h['container'].capitalize
     my_h['container_type'] = my_h['container'].downcase
+
+    my_h['container_flag'] = true
+    if my_h['container'].empty?
+      my_h['container_flag'] = false
+    end
 
     return my_h
   end

@@ -5,7 +5,11 @@
       <unitdate type="inclusive"><%=old_href['unitdate']%></unitdate>
     </unittitle>
     <physloc><%=old_href['physloc']%></physloc>
-    <container label="<%= old_href['container_label'] %>" type="<%= old_href['container_type'] %>"><%=old_href['number']%></container>
+    <% if old_href['container_flag'] %>
+    <container label="<%= old_href['container_label'] %>" type="<%= old_href['container_type'] %>">
+      <%=old_href['number']%>
+    </container>
+    <% end %>
     <physdesc><%=old_href['physdesc']%></physdesc>
   </did>
   <scopecontent>
