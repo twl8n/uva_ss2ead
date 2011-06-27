@@ -19,8 +19,20 @@
 This package is basically a single Ruby script that reads .csv or
 .xlsx with a certain column layout, and creates EAD xml.
 
-<%= dsc %> in pre_dsc_header_t.erb comes from the content hash value in the list of hashes
-generated during processing the spread sheet rows.
+<%= dsc %> in pre_dsc_header_t.erb comes from the content hash value
+in the list of hashes generated during processing the spread sheet
+rows.
+
+Due to the entities and DTD referenced in the EAD XML template, the
+following URLs and servers must remain active, and kept up to date.
+
+stylesheet http://ead.lib.virginia.edu/vivaead/published/document.xsl
+EAD DTD    http://text.lib.virginia.edu/bin/dtd/eadVIVA/eadVIVA.dtd
+logo       http://ead.lib.virginia.edu/vivaead/logos/uva-sc.jpg
+conditions http://www.lib.virginia.edu/speccol/vhp/conditions.html
+address    http://ead.lib.virginia.edu/vivaead/add_con/uva-sc_address.xml
+contact    http://ead.lib.virginia.edu/vivaead/add_con/uva-sc_contact.xml
+
 
 
 change notes

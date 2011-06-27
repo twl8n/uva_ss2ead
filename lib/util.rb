@@ -166,6 +166,7 @@ class Ss_converter
     return names
   end
 
+
   def self.file2loh(file)
     message = ""
     cm_flag = false
@@ -180,6 +181,7 @@ class Ss_converter
     elsif file.match(/\.xlsx/i)
       ss = Excelx.new(file)
       for row_num in 1..ss.last_row()
+        ss.row(row_num).each
         data.push(ss.row(row_num))
       end
     end
@@ -200,37 +202,79 @@ class Ss_converter
       end
       coll_hr[names[col_num]] = data[coll_data_row][col_num]
     }
+    coll_hr = fix_our_hash(coll_hr)
 
     for xx_dex in 2..(data.size-1)
       rh = Hash.new()
       row = data[xx_dex]
       row.each_index { |col_num|
         rh[names[col_num]] = row[col_num]
-
-        if rh['container'].to_s.empty?
-          rh['container'] = ""
-          # rh['container'] = "unknown"
-        end
-
-        # The roo code is converting an number into a float, so 1
-        # becomes 1.0 which is amusing. Force the number to be a string.
-        rh['component'] = sprintf("%d", rh['component'])
-
-        rh['container_label'] = rh['container'].capitalize
-        rh['container_type'] = rh['container'].downcase
-        
-        if ! cm_flag &&
-            ! rh['container'].empty? &&
-            ! C_list.member?(rh['container'].downcase)
-          cm_flag = true
-          message.concat("#{rh['num']} containter value \"#{rh['container']}\" not in list\n")
-        end
-
       }
+      rh = fix_our_hash(rh)
+      if ! cm_flag &&
+          ! rh['container'].empty? &&
+          ! C_list.member?(rh['container'].downcase)
+        cm_flag = true
+        message.concat("#{rh['num']} containter value \"#{rh['container']}\" not in list\n")
+      end
       loh.push(rh)
     end
     # dumploh(loh, "pre", names)
     return [loh, coll_hr, message]
+  end
+
+  def self.fix_our_hash(my_h)
+
+    # This is where we fix systematic issues with data. my_h is a
+    # hash.
+    
+    # num and component strangely convert to strings with floating
+    # point values even though celltype() says they are strings. We
+    # have to convert them into strings containing an
+    # integer. Oddly, other columns such as "c0x level" and "guide
+    # date" are type "float" even though they only contain
+    # strings. Either the Roo gem or Excel are confused. Regardless,
+    # fix the data here.
+
+    my_h['num'] = unintegerize(my_h['num'])
+    my_h['component'] = unintegerize(my_h['component'])
+    my_h['unitdate'] = unintegerize(my_h['unitdate'])
+    
+    if my_h['container'].to_s.empty?
+      my_h['container'] = ""
+      # my_h['container'] = "unknown"
+    end
+    
+    # If c0x level is not 'series', set a flag that will be used in
+    # the .erb to remove the label attribute.
+    if my_h['c0x level'].to_s.match(/series/)
+      my_h['series_flag'] = true
+    end
+    
+    my_h['container_label'] = my_h['container'].capitalize
+    my_h['container_type'] = my_h['container'].downcase
+
+    return my_h
+  end
+
+  def self.unintegerize(ivar)
+    ivar = ivar.to_s;
+    # If ivar contains all digits, or digits and dot followed by a zero
+    # then run it through sprintf to convert to string form as an integer.
+
+    # We want strings, so use sprintf() which returns a string.
+    # to_i() returns a Fixnum. Could use .to_i.to_s but that seems
+    # silly, where sprintf() is for serious programmers. sprintf()
+    # rounds, but in this cas we have onl y numbers with .0 on the end
+    # like 1.0, 4030.0, etc.
+
+    if ivar.match(/^\d+(\.0)*$/)
+      ivar = sprintf("%.0f", ivar)
+    end
+    if ivar == '0'
+      ivar = ""
+    end
+    return ivar
   end
 
 end # class Ss_converter

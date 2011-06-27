@@ -46,66 +46,43 @@ def self.fix_col_names(names)
 end
 
 def self.file2loh(file)
+  cm_flag = false
   special_row_2 = false
   loh = []
   coll_hr = Hash.new
+  data = []
   if file.match(/\.csv/i)
     ss = CSV.open(file, 'r')
-    # column names
-    names = ss.first() # row 1
-    names = fix_col_names(names)
-    
-    if (special_row_2)
-      # Save collection info in columns to the left of component.
-      collection_data = ss.first() # row 2
-      collection_data.each_index { |col_num|
-        # Only process data columns before component. 
-        if names[col_num] == 'component'
-          break
-        end
-        coll_hr[names[col_num]] = collection_data[col_num]
-      }
-    end
-      
-    # Turn the CSV data into a list of hashes.
-    # first() is like pop. Finding aid starts in row 3.
-    while (collection_data = ss.first())
-      rh = Hash.new()
-      collection_data.each_index { |col_num|
-        rh[names[col_num]] = collection_data[col_num]
-      }
-      loh.push(rh)
+    while (row = ss.first()) 
+      data.push(row)
     end
   elsif file.match(/\.xlsx/i)
     ss = Excelx.new(file)
-    names = ss.row(1)
-    names = fix_col_names(names)
-    
-    # Headers in row 1, collection data in row 2, finding aid starts in row 3
-    
-    if (special_row_2)
-      ss.row(2).each_index { |col_num|
-        if names[col_num] == 'component'
-          break
-        end
-        coll_hr[names[col_num]] = ss.row(2)[col_num]
-        print "collection  #{names[col_num]}: #{coll_hr[names[col_num]]}\n"
-      }
-      data_row = 3
-    else
-      data_row = 2
+    for row_num in 1..ss.last_row()
+      ss.row(row_num).each
+      data.push(ss.row(row_num))
     end
+  end
+  # Headers in [0] (row 1), collection data in [1] (row 2), finding
+  # aid starts in [2] (row 3)
+  
+  names = data[0]
+  names = fix_col_names(names)
 
-    for row_num in data_row..ss.last_row()
-      rh = Hash.new()
-      ss.row(row_num).each_index { |col_num|
-        rh[names[col_num]] = ss.row(row_num)[col_num]
-        # The roo code is converting an number into a float, so 1
-        # becomes 1.0 which is amusing. Force the number to be a string.
-        rh['component'] = sprintf("%d", rh['component'])
-      }
-      loh.push(rh)
+  for xx_dex in 1..(data.size-1)
+    rh = Hash.new()
+    row = data[xx_dex]
+    row.each_index { |col_num|
+      rh[names[col_num]] = row[col_num]
+    }
+    rh = Ss_converter.fix_our_hash(rh)
+    if ! cm_flag &&
+        ! rh['container'].empty? &&
+        ! C_list.member?(rh['container'].downcase)
+      cm_flag = true
+      message.concat("#{rh['num']} containter value \"#{rh['container']}\" not in list\n")
     end
+    loh.push(rh)
   end
   Ss_converter.dumploh(loh, "pre", names)
   return [loh, coll_hr, names]

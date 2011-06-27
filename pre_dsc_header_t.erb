@@ -14,7 +14,7 @@
       <titlestmt>
         <titleproper>
           A Guide to the <%= coll_hr['titleproper'] %>
-          <date><%= coll_hr['guide date'] %></date>
+          <date><%= coll_hr['collection date'] %></date>
         </titleproper>
         <subtitle id="sort">
           <num type="collectionnumber"><%= coll_hr['num'] %></num>
@@ -44,7 +44,7 @@
     <titlepage>
       <titleproper>
         <%= coll_hr['titleproper'] %>
-        <date><%= coll_hr['guide date'] %></date>
+        <date><%= coll_hr['collection date'] %></date>
       </titleproper>
       <subtitle>
         A Collection in
@@ -74,9 +74,14 @@
       <head>Descriptive Summary </head>
       <repository label="Repository" encodinganalog="852$a">Special Collections, University of Virginia Library </repository>
       <unittitle label="Title" encodinganalog="245$a">
-        <unitdate type="inclusive" label="Date" encodinganalog="245$f"/>
+	<%= coll_hr['titleproper'] %>
+        <unitdate type="inclusive" label="Date" encodinganalog="245$f">
+	  <%= coll_hr['collection date'] %>
+	</unitdate>
       </unittitle>
-      <unitid label="Accession Number" encodinganalog="099$a"/>
+      <unitid label="Accession Number" encodinganalog="099$a">
+	<%= coll_hr['num'] %>
+      </unitid>
       <physloc label=""/>
       <physdesc label="Physical Characteristics" encodinganalog="300$a"/>
       <langmaterial label="Language">
@@ -114,8 +119,8 @@
       <head>Arrangement </head>
       <p/>
     </arrangement>
-    <dsc>
-      <head>Conents List</head>
+    <dsc type="combined">
+      <head>Contents List</head>
       <%= dsc %>
     </dsc>
   </archdesc>
