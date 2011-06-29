@@ -12,6 +12,7 @@ Home = "/home/twl8n/uva_ss2ead"
 Msg_schema = "msg_schema.sql"
 Orig = "/home/twl8n/dcs_finding_aids"
 Rmatic_db = "rmatic.db"
+Readme_file = "#{Home}/public/readme.html"
 
 class Ss_converter
 

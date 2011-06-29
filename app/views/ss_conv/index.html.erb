@@ -3,18 +3,27 @@
     <title>Spreadsheet to EAD converter</title>
   </head>
   <body>
-    <% form_tag('upload', :method => 'post', :multipart => true) do %>
-    <p>
-      <label for="upload">Upload spreadsheeet</label> : 
-      <%= file_field_tag('upload') %>
-    </p>
-    
-    <%= submit_tag "Upload" %>
-
-    <% end %>
-
 <pre><%= @message %></pre>
     <table border="0" cellpadding="3" cellspacing="0">
+      <tr>
+	<td valign="top" colspan="3">
+	  <% form_tag('upload', :method => 'post', :multipart => true) do %>
+	    <label for="upload">Upload spreadsheeet</label> : 
+	    <%= file_field_tag('upload') %>
+	  <%= submit_tag "Upload" %>
+	  <% end %>
+	</td>
+	<td valign="top" colspan="4" align="right">
+	  <a href="ead_template.xlsx">Download empty spreadsheet (<%= @ss_date %>)</a>
+	  <br>
+	  <a href="readme.html">Documentation readme</a>
+	  <br>
+	  <a href="outer_template">Outer template</a>
+	  <br>
+	  <a href="inner_template">Inner template</a>
+	  <br>
+	</td>
+      </tr>
       <tr>
 	<td colspan="7">
 	  <hr>

@@ -4,6 +4,23 @@ require 'util' # our local utility methods
 
 class SsConvController < ApplicationController
   
+  def outer_template
+    @xml_source = IO.read("#{Home}/pre_dsc_header_t.erb")
+    send_data(@xml_source,
+              :filename => "pre_dsc_header_t.erb",
+              :type => "text/plain",
+              :disposition => "inline")
+  end
+
+  def inner_template
+    @xml_source = IO.read("#{Home}/cox_loop_t.erb")
+    send_data(@xml_source,
+              :filename => "cox_loop_t.erb",
+              :type => "text/plain",
+              :disposition => "inline")
+  end
+
+
   def root_url
     if ! defined?(request)
       return '/'
@@ -168,6 +185,12 @@ class SsConvController < ApplicationController
       }
       @f_info.push(rh);
     }
+
+    # Get the modification time for the spreadsheet template. We are
+    # lazy and just use the standard format in spite of it being
+    # somewhat odd looking to non-Linux people.
+    @ss_date = File.mtime(Readme_file)
+
     @message = @mdo.get_message()
     @mdo.set_message("", false) # clear the message
   end
