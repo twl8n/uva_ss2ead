@@ -68,7 +68,8 @@
 	<td valign="top">
 	  <% if rh[:xml_exists] %>
 	  <a href="show_xml?xml_fname=<%= rh[:xml_fname] %>&type=html">as web page</a>
-	  | <a href="show_xml?xml_fname=<%= rh[:xml_fname] %>&type=text">as text</a>
+	  | <a href="show_xml?xml_fname=<%= rh[:xml_fname] %>&type=raw">raw XML text</a>
+	  | <a href="show_xml?xml_fname=<%= rh[:xml_fname] %>&type=rendered">rendered XML text</a>
 	  <% end %>
 	</td>
 	</td>

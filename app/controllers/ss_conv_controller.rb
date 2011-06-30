@@ -88,27 +88,48 @@ class SsConvController < ApplicationController
         # than figuring out why, just run it through xsltproc to create
         # an html file. Create the html every time, on the fly so we
         # don't have stale data.
+
+        # Create a valid .html name so that browser "Save as..." works.
         html_fname = xml_base + ".html"
-        html_full_fname = Orig + '/' + html_fname
-        `xsltproc #{xml_full_fname} > #{html_full_fname}`
-        @text = IO.read("#{html_full_fname}")
+
+        # Don't render into a static file in disk. It works, but
+        # there's no reason. Instead just use backticks.
+
+        # html_full_fname = Orig + '/' + html_fname
+        # `xsltproc #{xml_full_fname} > #{html_full_fname}`
+        # @text = IO.read("#{html_full_fname}")
+
+        @text = `xsltproc #{xml_full_fname}`
         send_data(@text,
                   :filename => html_fname,
                   :type => "text/html",
                   :disposition => "inline")
-      else
+      elsif output_type == 'raw'
         @text = IO.read("#{xml_full_fname}")
         send_data(@text,
                   :filename => xml_fname,
                   :type => "text/plain",
                   :disposition => "inline")
         
+      elsif output_type == 'rendered'
+        @text = `xsltproc #{Home}/render.xsl #{xml_full_fname}`
+        send_data(@text,
+                  :filename => xml_fname,
+                  :type => "text/plain",
+                  :disposition => "inline")
+      else
+        @text = "Incorrect type."
+        send_data(@text,
+                  :filename => "error.txt",
+                  :type => "text/plain",
+                  :disposition => "inline")
       end
     else
       @mdo.set_message("Cannot find xml file #{xml_full_fname}", true) #append
       redirect_to :action => 'index'
     end
   end
+
 
   def show_ss
     # View a spreadsheet in name/value line mode in the web browser
