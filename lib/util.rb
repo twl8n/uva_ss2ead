@@ -327,9 +327,12 @@ class Msg_dohicky
 
     if (! File.size?(@fn))
       db = SQLite3::Database.new(@fn)
+      db.busy_timeout=1000 # milliseconds?
+      db.transaction(:immediate)
       sql_source = "#{msg_path}/#{Msg_schema}"
       db.execute_batch(IO.read(sql_source))
       db.close
+      db.commit
     end
   end
   
@@ -338,15 +341,16 @@ class Msg_dohicky
   
   def set_message(str,flag)
     db = SQLite3::Database.new(@fn)
+    db.busy_timeout=1000 # milliseconds?
     if (! flag)
-      db.transaction
+      db.transaction(:immediate)
       stmt = db.prepare("delete from msg where user_id=?")
       stmt.execute(@user_id);
       stmt.close
       db.commit
     end
 
-    db.transaction
+    db.transaction(:immediate)
     stmt = db.prepare("insert into msg (user_id,msg_text) values (?,?)")
     stmt.execute(@user_id, str);
     stmt.close
@@ -360,7 +364,8 @@ class Msg_dohicky
 
   def get_message
     db = SQLite3::Database.new(@fn)
-    db.transaction
+    db.busy_timeout=1000 # milliseconds?
+    db.transaction(:immediate)
     stmt = db.prepare("select msg_text from msg where user_id = ? order by id")
     ps = Proc_sql.new();
     stmt.execute(@user_id){ |rs|

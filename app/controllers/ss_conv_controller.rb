@@ -4,6 +4,34 @@ require 'util' # our local utility methods
 
 class SsConvController < ApplicationController
   
+  def convert_all
+    pid = Process.fork;
+    if (! pid)
+      Process.exec("#{Home}/render_ss.rb #{Orig}")
+    else
+      Process.detach(pid)
+    end
+    @mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    @mdo.set_message("Convert all started.", true)
+
+    # Dir.chdir(Orig) {
+    # Find.find("./") { |file|
+    #   # Skip . .. and files that aren't .csv or .xlsx
+    #   if file.match(/^\.[\/]*$/) || ! File.extname(file).match(/csv|xlsx/i)
+    #     next
+    #   end
+    #   if File.directory?(file)
+    #     # Don't descend into directories.
+    #     Find.prune()
+    #   else
+    #     mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    #     message = Ss_converter.convert_one(file, mdo)
+    #   end
+    # }
+
+    redirect_to :action => 'index'
+  end
+
   def outer_template
     @xml_source = IO.read("#{Home}/pre_dsc_header_t.erb")
     send_data(@xml_source,
