@@ -259,6 +259,15 @@ class Ss_converter
       my_h['container_flag'] = false
     end
 
+    if ! my_h['bioghist'].to_s.empty?
+      my_h['bioghist'].gsub!(/\n+/ms, "<\/p>\n<p>")
+    end
+
+    if ! my_h['guide_scope'].to_s.empty?
+      my_h['guide_scope'].gsub!(/\n+/ms, "<\/p>\n<p>")
+    end
+
+
     return my_h
   end
 

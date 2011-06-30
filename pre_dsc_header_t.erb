@@ -100,7 +100,7 @@
       </userestrict>
       <prefercite encodinganalog="524$a">
         <head>Preferred Citation </head>
-        <p><%= coll_hr['titleproper'] %>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
+        <p><%= coll_hr['titleproper'] %><% if ! coll_hr['collection date'].to_s.empty? %> <%= coll_hr['collection date'] %><% end %>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
       </prefercite>
       <acqinfo encodinganalog="541$a">
         <head>Acquisition Information </head>
