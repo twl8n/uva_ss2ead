@@ -47,7 +47,7 @@ if File.directory?(ARGV[0])
       else
         #print "work #{file}\n"
         # work(file)
-        mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+        mdo = Msg_dohicky.new(get_remote_addr, Home)
         message = Ss_converter.convert_one(file, mdo)
         puts message
       end
@@ -58,7 +58,7 @@ else
   path = File.dirname(ARGV[0])
   file = File.basename(ARGV[0])
   Dir.chdir(path) {
-    mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    mdo = Msg_dohicky.new(get_remote_addr, Home)
     message = Ss_converter.convert_one(file, mdo)
     puts message
   }

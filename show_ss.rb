@@ -10,30 +10,13 @@ require 'csv'
 require 'erb'
 require 'roo'
 require 'find'
-require 'lib/util'
 
-# def self.dumploh(loh, label, names)
-#   xx = 0
-#   max_nsize = 0
-#   names.each { |item|
-#     if (item.size > max_nsize)
-#       max_nsize = item.size
-#     end
-#   }
+# Works as of 1.9
+# require_relative 'lib/util'
 
-#   while xx < loh.size
-#     href = loh[xx]
-#     names.each_index { |yy|
-#       fmt = "%+#{max_nsize}.#{max_nsize}s"
-#       # Show row and col numbers as one-based since they are counting
-#       # numbers, not array indices.
-#       printf("%02d %02d #{fmt}: %s\n", xx+1, yy+1, names[yy], href[names[yy]])
-#     }
-#     print "\n"
-#     xx += 1
-#   end
+# Prior to 1.9 do this:
+require File.join(File.dirname(__FILE__), 'lib/util')
 
-# end
 
 def self.fix_col_names(names)
   names.each_index { |xx|
@@ -46,6 +29,7 @@ def self.fix_col_names(names)
 end
 
 def self.file2loh(file)
+  message = ""
   cm_flag = false
   special_row_2 = false
   loh = []
@@ -58,10 +42,30 @@ def self.file2loh(file)
     end
   elsif file.match(/\.xlsx/i)
     ss = Excelx.new(file)
-    for row_num in 1..ss.last_row()
-      ss.row(row_num).each
-      data.push(ss.row(row_num))
+
+    # http://roo.rubyforge.org/rdoc/index.html
+    if ss.sheets.length > 1
+      print "Using two sheets.\n\n"
+      # If we have a second sheet, find out how many rows, then
+      # concat each row of sheet[1] onto the corresponding row of
+      # sheet[0].
+      
+      max_row = ss.last_row(sheet=ss.sheets[0])
+      if ss.last_row(sheet=ss.sheets[1]) > max_row
+        max_row = ss.last_row(sheet=ss.sheets[1])
+      end
+      for row_num in 1..max_row
+        temp_row = ss.row(row_num, sheet=ss.sheets[0])
+        temp_row.concat(ss.row(row_num, sheet=ss.sheets[1]))
+        data.push(temp_row)
+      end
+    else 
+      print "Using one sheet.\n\n"
+      for row_num in 1..ss.last_row()
+        data.push(ss.row(row_num))
+      end
     end
+
   end
   # Headers in [0] (row 1), collection data in [1] (row 2), finding
   # aid starts in [2] (row 3)

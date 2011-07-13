@@ -7,6 +7,17 @@ require 'erb'
 require 'roo'
 require 'find'
 
+# ss = Excelx.new("public/test.xlsx")
+ss = Excelx.new("public/ead_template.xlsx")
+puts ss.sheets[0]
+if ss.sheets[0] == "PartI"
+  print " have part1\n"
+else
+  print "nope\n"
+end
+
+exit
+
 names = 1,2,3,4
 
 names.each_index { |xx|

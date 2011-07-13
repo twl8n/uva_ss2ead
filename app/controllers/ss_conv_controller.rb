@@ -11,23 +11,8 @@ class SsConvController < ApplicationController
     else
       Process.detach(pid)
     end
-    @mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    @mdo = Msg_dohicky.new(get_remote_addr, Home)
     @mdo.set_message("Convert all started.", true)
-
-    # Dir.chdir(Orig) {
-    # Find.find("./") { |file|
-    #   # Skip . .. and files that aren't .csv or .xlsx
-    #   if file.match(/^\.[\/]*$/) || ! File.extname(file).match(/csv|xlsx/i)
-    #     next
-    #   end
-    #   if File.directory?(file)
-    #     # Don't descend into directories.
-    #     Find.prune()
-    #   else
-    #     mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
-    #     message = Ss_converter.convert_one(file, mdo)
-    #   end
-    # }
 
     redirect_to :action => 'index'
   end
@@ -67,7 +52,7 @@ class SsConvController < ApplicationController
   def upload
     # post = save_file(params[:upload], params[:uuid].to_s())
     upload = params[:upload]
-    @mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    @mdo = Msg_dohicky.new(get_remote_addr, Home)
   
     if (upload.to_s.empty?)
       @mdo.set_message("No file name so nothing was uploaded.", true)
@@ -104,7 +89,7 @@ class SsConvController < ApplicationController
     # View am xml file in the browser
     xml_fname  = params[:xml_fname]
     output_type = params[:type]
-    @mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    @mdo = Msg_dohicky.new(get_remote_addr, Home)
 
     # Process ss_fname through File to untaint
     xml_ext = File.extname(xml_fname)
@@ -161,7 +146,7 @@ class SsConvController < ApplicationController
 
   def show_ss
     # View a spreadsheet in name/value line mode in the web browser
-    @mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    @mdo = Msg_dohicky.new(get_remote_addr, Home)
 
     ss_name  = params[:ss_name]
     # Process ss_name through File to untaint
@@ -183,7 +168,7 @@ class SsConvController < ApplicationController
   def index
     # file report / list
 
-    @mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    @mdo = Msg_dohicky.new(get_remote_addr, Home)
 
     @f_info = [] 
     bgcolor = '#EEEDFD'
@@ -238,7 +223,8 @@ class SsConvController < ApplicationController
     # Get the modification time for the spreadsheet template. We are
     # lazy and just use the standard format in spite of it being
     # somewhat odd looking to non-Linux people.
-    @ss_date = File.mtime(Readme_file)
+    @ss_date = File.mtime(Empty_ss)
+    @readme_date = File.mtime(Readme_file)
 
     @message = @mdo.get_message()
     @mdo.set_message("", false) # clear the message
@@ -247,7 +233,7 @@ class SsConvController < ApplicationController
   def convert_ss
     # run render
     ss_name  = params[:ss_name]
-    @mdo = Msg_dohicky.new(get_remote_addr, "/home/twl8n/uva_ss2ead")
+    @mdo = Msg_dohicky.new(get_remote_addr, Home)
 
     # Process ss_name through File to untaint
     ss_ext = File.extname(ss_name)
