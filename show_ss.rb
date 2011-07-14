@@ -79,7 +79,7 @@ def self.file2loh(file)
     row.each_index { |col_num|
       rh[names[col_num]] = row[col_num]
     }
-    rh = Ss_converter.fix_our_hash(rh)
+    rh = Ss_converter.fix_our_hash(rh, "show_ss rh: #{file}" )
     if ! cm_flag &&
         ! rh['container'].empty? &&
         ! C_list.member?(rh['container'].downcase)

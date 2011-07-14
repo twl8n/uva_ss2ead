@@ -87,7 +87,7 @@
       <langmaterial label="Language">
         <language langcode="eng">English </language>
       </langmaterial>
-      <% if ! coll_hr['creator'].empty? %>
+      <% if ! coll_hr['creator'].to_s.empty? %>
       <origination label=“creator”><%= coll_hr['creator'] %>
       </origination>
       <% end %>
@@ -96,7 +96,7 @@
       <head>Administrative Information </head>
       <accessrestrict encodinganalog="506$a">
         <head>Access Restrictions </head>
-	<% if coll_hr['access_restrict'].empty? %>
+	<% if coll_hr['access_restrict'].to_s.empty? %>
         <p>There are no restrictions. </p>
 	<% else %>
         <p><%= coll_hr['access_restrict'] %></p>
@@ -104,11 +104,11 @@
       </accessrestrict>
       <userestrict encodinganalog="540$a">
         <head>Use Restrictions </head>
-	<% if coll_hr['use_restrict'].empty? %>
+	<% if coll_hr['use_restrict'].to_s.empty? %>
         <p>There are no restrictions. </p>
 	<% else %>
         <p><%= coll_hr['use_restrict'] %></p>
-	<% end>
+	<% end %>
       </userestrict>
       <prefercite encodinganalog="524$a">
         <head>Preferred Citation </head>
@@ -131,14 +131,14 @@
       <head>Scope and Content </head>
       <p><%= coll_hr['guide_scope'] %></p>
     </scopecontent>
-    <% if ! coll_hr['related_mats'].empty? %>
-    <descgrp type=“add”>
+    <% if ! coll_hr['related_mats'].to_s.empty? %>
+    <descgrp type="add">
       <head>Adjunct Descriptive Data</head>
       <relatedmaterial>
 	<p><%= coll_hr['related_mats'] %></p>
       </relatedmaterial>
-      <% end %>
     </descgrp>
+    <% end %>
     <arrangement encodinganalog="351">
       <head>Arrangement </head>
       <p><%= coll_hr['arrangement'] %></p>

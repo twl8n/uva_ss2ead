@@ -13,10 +13,10 @@
     <physdesc><%=old_href['physdesc']%></physdesc>
   </did>
   <scopecontent>
-    <% if ! coll_hr['c_num'].empty? %>
-    <num><%= coll_hr[c_num'] %></num>
+    <% if old_href.has_key?('c_num') && ! old_href['c_num'].empty? %>
+    <num><%= old_href['c_num'] %></num>
     <% end %>
-    <p><%=old_href['scopecontent']%></p>
+    <p><%= old_href['scopecontent'] %></p>
   </scopecontent>
   <arrangement>
     <p/>

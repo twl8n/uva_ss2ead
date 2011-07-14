@@ -214,7 +214,7 @@ class Ss_converter
       end
       coll_hr[names[col_num]] = data[coll_data_row][col_num]
     }
-    coll_hr = fix_our_hash(coll_hr)
+    coll_hr = fix_our_hash(coll_hr, "coll_hr: #{file}")
 
     for xx_dex in 2..(data.size-1)
       rh = Hash.new()
@@ -222,7 +222,7 @@ class Ss_converter
       row.each_index { |col_num|
         rh[names[col_num]] = row[col_num]
       }
-      rh = fix_our_hash(rh)
+      rh = fix_our_hash(rh, "rh: #{file}")
       if ! cm_flag &&
           ! rh['container'].empty? &&
           ! C_list.member?(rh['container'].downcase)
@@ -244,7 +244,7 @@ class Ss_converter
     return var
   end
 
-  def self.fix_our_hash(my_h)
+  def self.fix_our_hash(my_h, msg)
 
     # This is where we fix systematic issues with data. my_h is a
     # hash.
@@ -268,8 +268,7 @@ class Ss_converter
     deprecated_keys = ['c0x level','collection date', 'acqinfo']
     deprecated_keys.each { |dkey|
       if my_h.has_key?(dkey)
-        print "Error: have deprecated column \'#{dkey}\'\n"
-        exit
+        print("Error: have deprecated column \'#{dkey}\' msg: #{msg}\n")
       end
     }
 
