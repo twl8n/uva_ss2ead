@@ -83,12 +83,14 @@
 	<%= coll_hr['num'] %>
       </unitid>
       <physloc label=""/>
-      <physdesc label="Physical Characteristics" encodinganalog="300$a"/>
+      <physdesc label="Physical Characteristics" encodinganalog="300$a">
+	<%= coll_hr['extent'] %>
+      </physdesc>
       <langmaterial label="Language">
         <language langcode="eng">English </language>
       </langmaterial>
       <% if ! coll_hr['creator'].to_s.empty? %>
-      <origination label=“creator”><%= coll_hr['creator'] %>
+      <origination label="Creator"><%= coll_hr['creator'] %>
       </origination>
       <% end %>
     </did>

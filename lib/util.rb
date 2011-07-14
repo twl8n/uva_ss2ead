@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 
 require 'erb'
@@ -6,6 +7,7 @@ require 'csv'
 require 'roo'
 require 'find'
 require 'sqlite3'
+require 'escape'
 
 load File.join(File.dirname(__FILE__),'../config/configure.rb')
 
@@ -243,7 +245,7 @@ class Ss_converter
     end
     return var
   end
-
+  
   def self.fix_our_hash(my_h, msg)
 
     # This is where we fix systematic issues with data. my_h is a
@@ -295,6 +297,27 @@ class Ss_converter
     my_h['arrangement']  = newline_to_p(my_h['arrangement'])
     my_h['scopecontent']  = newline_to_p(my_h['scopecontent'])
 
+    # http://rubydoc.info/gems/escape/0.0.4/frames
+
+    # Escape.html_text escapes a string appropriate for HTML text
+    # using character references.
+    
+    # It escapes 3 characters:
+    #       ’&’ to ’&amp;’
+    #       ’<’ to ’&lt;’
+    #       ’>’ to ’&gt;’
+    #  Escape.html_text("abc") #=> "abc"
+    #  Escape.html_text("a & b < c > d") #=> "a &amp; b &lt; c &gt; d"
+    
+    # This function is not appropriate for escaping HTML element
+    # attribute because quotes are not escaped.
+
+    my_h.keys.each { |key|
+      if my_h[key].class == String
+        my_h[key] = Escape.html_text(my_h[key])
+      end
+    }
+      
     return my_h
   end
 
