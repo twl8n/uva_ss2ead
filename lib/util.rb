@@ -235,6 +235,15 @@ class Ss_converter
     return [loh, coll_hr, message]
   end
 
+  def self.newline_to_p(var)
+    # I'm not sure the .to_s is sensible. Only strings should be
+    # passed in here, but we'll force .to_s just in case.
+    if ! var.to_s.empty?
+      var = var.to_s.gsub(/\n+/ms, "<\/p>\n<p>")
+    end
+    return var
+  end
+
   def self.fix_our_hash(my_h)
 
     # This is where we fix systematic issues with data. my_h is a
@@ -243,7 +252,7 @@ class Ss_converter
     # num and component strangely convert to strings with floating
     # point values even though celltype() says they are strings. We
     # have to convert them into strings containing an
-    # integer. Oddly, other columns such as "c0x level" and "guide
+    # integer. Oddly, other columns such as "c_level" and "guide
     # date" are type "float" even though they only contain
     # strings. Either the Roo gem or Excel are confused. Regardless,
     # fix the data here.
@@ -256,9 +265,17 @@ class Ss_converter
       my_h['container'] = ""
     end
     
-    # If c0x level is not 'series', set a flag that will be used in
+    deprecated_keys = ['c0x level','collection date', 'acqinfo']
+    deprecated_keys.each { |dkey|
+      if my_h.has_key?(dkey)
+        print "Error: have deprecated column \'#{dkey}\'\n"
+        exit
+      end
+    }
+
+    # If c_level is not 'series', set a flag that will be used in
     # the .erb to remove the label attribute.
-    if my_h['c0x level'].to_s.match(/series/)
+    if my_h['c_level'].to_s.match(/series/)
       my_h['series_flag'] = true
     end
     
@@ -270,14 +287,14 @@ class Ss_converter
       my_h['container_flag'] = false
     end
 
-    if ! my_h['bioghist'].to_s.empty?
-      my_h['bioghist'].gsub!(/\n+/ms, "<\/p>\n<p>")
-    end
-
-    if ! my_h['guide_scope'].to_s.empty?
-      my_h['guide_scope'].gsub!(/\n+/ms, "<\/p>\n<p>")
-    end
-
+    my_h['bioghist'] = newline_to_p(my_h['bioghist'])
+    my_h['guide_scope'] = newline_to_p(my_h['guide_scope'])
+    my_h['access_restrict'] = newline_to_p(my_h['access_restrict'])
+    my_h['use_restrict']  = newline_to_p(my_h['use_restrict'])
+    my_h['process_info']  = newline_to_p(my_h['process_info'])
+    my_h['related_mats']  = newline_to_p(my_h['related_mats'])
+    my_h['arrangement']  = newline_to_p(my_h['arrangement'])
+    my_h['scopecontent']  = newline_to_p(my_h['scopecontent'])
 
     return my_h
   end

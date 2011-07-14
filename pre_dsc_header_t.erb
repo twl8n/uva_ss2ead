@@ -14,7 +14,7 @@
       <titlestmt>
         <titleproper>
           A Guide to the <%= coll_hr['titleproper'] %>
-          <date><%= coll_hr['collection date'] %></date>
+          <date><%= coll_hr['collection_date'] %></date>
         </titleproper>
         <subtitle id="sort">
           <num type="collectionnumber"><%= coll_hr['num'] %></num>
@@ -44,7 +44,7 @@
     <titlepage>
       <titleproper>
         <%= coll_hr['titleproper'] %>
-        <date><%= coll_hr['collection date'] %></date>
+        <date><%= coll_hr['collection_date'] %></date>
       </titleproper>
       <subtitle>
         A Collection in
@@ -76,7 +76,7 @@
       <unittitle label="Title" encodinganalog="245$a">
 	<%= coll_hr['titleproper'] %>
         <unitdate type="inclusive" label="Date" encodinganalog="245$f">
-	  <%= coll_hr['collection date'] %>
+	  <%= coll_hr['collection_date'] %>
 	</unitdate>
       </unittitle>
       <unitid label="Accession Number" encodinganalog="099$a">
@@ -87,25 +87,41 @@
       <langmaterial label="Language">
         <language langcode="eng">English </language>
       </langmaterial>
+      <% if ! coll_hr['creator'].empty? %>
+      <origination label=“creator”><%= coll_hr['creator'] %>
+      </origination>
+      <% end %>
     </did>
     <descgrp type="admininfo">
       <head>Administrative Information </head>
       <accessrestrict encodinganalog="506$a">
         <head>Access Restrictions </head>
+	<% if coll_hr['access_restrict'].empty? %>
         <p>There are no restrictions. </p>
+	<% else %>
+        <p><%= coll_hr['access_restrict'] %></p>
+	<% end %>
       </accessrestrict>
       <userestrict encodinganalog="540$a">
         <head>Use Restrictions </head>
+	<% if coll_hr['use_restrict'].empty? %>
         <p>There are no restrictions. </p>
+	<% else %>
+        <p><%= coll_hr['use_restrict'] %></p>
+	<% end>
       </userestrict>
       <prefercite encodinganalog="524$a">
         <head>Preferred Citation </head>
-        <p><%= coll_hr['titleproper'] %><% if ! coll_hr['collection date'].to_s.empty? %> <%= coll_hr['collection date'] %><% end %>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
+        <p><%= coll_hr['titleproper'] %><% if ! coll_hr['collection_date'].to_s.empty? %> <%= coll_hr['collection_date'] %><% end %>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
       </prefercite>
       <acqinfo encodinganalog="541$a">
         <head>Acquisition Information </head>
-        <p><%= coll_hr['acqinfo'] %></p>
+        <p><%= coll_hr['acq_info'] %></p>
       </acqinfo>
+      <processinfo>
+	<head>Processing Information</head>
+	<p><%= coll_hr['process_info'] %></p>
+      </processinfo>
     </descgrp>
     <bioghist encodinganalog="545$a">
       <head>Biographical/Historical Information </head>
@@ -115,9 +131,17 @@
       <head>Scope and Content </head>
       <p><%= coll_hr['guide_scope'] %></p>
     </scopecontent>
+    <% if ! coll_hr['related_mats'].empty? %>
+    <descgrp type=“add”>
+      <head>Adjunct Descriptive Data</head>
+      <relatedmaterial>
+	<p><%= coll_hr['related_mats'] %></p>
+      </relatedmaterial>
+      <% end %>
+    </descgrp>
     <arrangement encodinganalog="351">
       <head>Arrangement </head>
-      <p/>
+      <p><%= coll_hr['arrangement'] %></p>
     </arrangement>
     <dsc type="combined">
       <head>Contents List</head>

@@ -1,5 +1,5 @@
 
-<c0<%=old_href['component']%> <% if rh['series_flag'] %>level="<%=old_href['c0x level']%>"<% end %>>
+<c0<%=old_href['component']%> <% if rh['series_flag'] %>level="<%=old_href['c_level']%>"<% end %>>
   <did>
     <unittitle <%= old_href['label_series'] %>><%=old_href['unittitle']%>
       <unitdate type="inclusive"><%=old_href['unitdate']%></unitdate>
@@ -13,6 +13,9 @@
     <physdesc><%=old_href['physdesc']%></physdesc>
   </did>
   <scopecontent>
+    <% if ! coll_hr['c_num'].empty? %>
+    <num><%= coll_hr[c_num'] %></num>
+    <% end %>
     <p><%=old_href['scopecontent']%></p>
   </scopecontent>
   <arrangement>
