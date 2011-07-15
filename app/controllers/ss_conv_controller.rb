@@ -159,7 +159,6 @@ class SsConvController < ApplicationController
     else
       @ss_text = "Can' find #{ss_full_name}\n"
     end
-    @mdo.set_message("Viewing successful", true) #append
     @message = @mdo.get_message()
     @mdo.set_message("", false) # clear the message
     @index_url = root_url()
@@ -209,7 +208,8 @@ class SsConvController < ApplicationController
         color_toggle = true
         rh[:bgcolor] = bgcolor
       end
-      loh, coll_hr = Ss_converter.file2loh(file)
+      ssc = Ss_converter.new(file, @mdo, true)
+      loh, coll_hr, msg_unused, names_unused = ssc.file2loh()
       
       # Copy the collection hash values into rh to make them visble to
       # the web page.
@@ -234,13 +234,15 @@ class SsConvController < ApplicationController
     # run render
     ss_name  = params[:ss_name]
     @mdo = Msg_dohicky.new(get_remote_addr, Home)
+    @mdo.set_message("", false)
 
     # Process ss_name through File to untaint
     ss_ext = File.extname(ss_name)
     ss_base = File.basename(ss_name, ss_ext)
     ss_full_name = Orig + "/" + ss_base + ss_ext
     if File.exists?(ss_full_name)
-      Ss_converter.convert_one(ss_full_name, @mdo)
+      ssc = Ss_converter.new(ss_full_name, @mdo, false)
+      ssc.convert_one()
     else
       @mdo.set_message("Error: Cannot find #{ss_full_name}", true) #append
     end

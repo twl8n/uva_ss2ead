@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 
 require 'erb'
 require 'rubygems'
@@ -13,10 +11,22 @@ load File.join(File.dirname(__FILE__),'../config/configure.rb')
 
 class Ss_converter
 
-  def initialize
+  def initialize(file, mdo, quiet_flag)
+    @file = file
+    @mdo = mdo
+    @dk_flags = Hash.new
+    @quiet_flag = quiet_flag
   end
 
-  def self.proc_rows(loh, cox_t)
+  def proc_rows(loh, cox_t)
+    # This method does the real work of changing a flat list (of
+    # hashes) into nested XML text. The results array is stack and
+    # stack[0] is the special, final accumulator of everything that
+    # happens. Each child writes into the 'content' key of the
+    # parent. Each entry renders itself along with its 'content' into
+    # it's parent 'content' key. The final parent is stack[0] which
+    # renders itself and returns.
+
     content = ""
     stack = []
     rh = Hash.new()
@@ -30,7 +40,9 @@ class Ss_converter
       href = loh[xx]
       cox = href['component']
       if (cox.to_i < 1)
-        print "Row #{xx+1} must have a valid >= 1 component\n"
+        msg = "Error: Row #{xx+1} must have a valid >= 1 component"
+        print "#{msg}\n"
+        @mdo.set_message(msg, true)
         return [false,""]
       end
       href['content'] = ""
@@ -59,30 +71,28 @@ class Ss_converter
       var = cox_t.result(binding())
       stack.last['content'].concat( var )
     end
-    # print "<dsc>#{stack.last['content']}\n</dsc>\n"
+    #abort "<dsc>#{stack.last['content']}\n</dsc>\n"
     return [true,stack.last['content']]
   end
 
-  def self.convert_one(file, mdo)
-    
+  def convert_one()
     # _t aka "template"
-
     @outer_t = ERB.new File.new("#{Home}/pre_dsc_header_t.erb").read, nil, "%"
     @cox_t = ERB.new File.new("#{Home}/cox_loop_t.erb").read, nil, "%"
 
-    # Read the spreadsheet file into a list of hashes, process the
+    # Read the spreadsheet @file into a list of hashes, process the
     # list of hashes into dsc xml, process the dsc with the outer
     # elements of ead, make sure our output files doesn't exist,
     # write the output.
 
-    loh, coll_hr, f2l_message = file2loh(file)
+    loh, coll_hr, f2l_message, names_unused = file2loh()
     r_flag, dsc = proc_rows(loh, @cox_t)
     if (r_flag)
-      base = File.basename(file,File.extname(file)) 
-      path = File.dirname(file)
+      base = File.basename(@file,File.extname(@file)) 
+      path = File.dirname(@file)
       new_name = "#{path}/#{base}.xml"
 
-      # Write/overwrite the xml file name into a hash value for each
+      # Write/overwrite the xml @file name into a hash value for each
       # iteration.  This goes into the output and needs to be the name
       # without the path.
       coll_hr['xml_name'] = "#{base}.xml" # new_name
@@ -90,25 +100,20 @@ class Ss_converter
       # coll_hr must be defined and valid for outer_t.
       xml_output = @outer_t.result(binding())
 
-      # if File.exists?(new_name)
-      #   File.rename(new_name, "#{new_name}.bak")
-      # end
-
-      # jun 23 2011 There is no point keeping .bak files so simply
-      # overwrite.
-
+      message = "writing #{new_name}\n"
+      
       File.open(new_name, "wb") { |my_xml|
         my_xml.write(xml_output)
       }
       
-      message = "Complete: processing #{file}"
+      message.concat("Complete: processing #{@file}")
     else
-      message = "Error: processing #{file}"
+      message = "Error: processing #{@file}"
     end
 
-    mdo.set_message("Complete: processing #{file}", true)
+    @mdo.set_message(message, true)
     if ! f2l_message.empty?
-      mdo.set_message(f2l_message, true)
+      @mdo.set_message(f2l_message, true)
       message.concat(f2l_message)
     end
     return message
@@ -152,7 +157,7 @@ class Ss_converter
 
   end
 
-  def self.fix_col_names(names)
+  def fix_col_names(names)
     # Over time column names have changed. Here we fix any legacy
     # names.
     names.each_index { |xx|
@@ -165,7 +170,11 @@ class Ss_converter
   end
 
 
-  def self.file2loh(file)
+  def file2loh()
+    file = @file
+    if ! @quiet_flag
+      @mdo.set_message("working on #{file}", true)
+    end
     message = ""
     cm_flag = false
     loh = []
@@ -234,10 +243,10 @@ class Ss_converter
       loh.push(rh)
     end
     # dumploh(loh, "pre", names)
-    return [loh, coll_hr, message]
+    return [loh, coll_hr, message, names]
   end
 
-  def self.newline_to_p(var)
+  def newline_to_p(var)
     # I'm not sure the .to_s is sensible. Only strings should be
     # passed in here, but we'll force .to_s just in case.
     if ! var.to_s.empty?
@@ -246,8 +255,7 @@ class Ss_converter
     return var
   end
   
-  def self.fix_our_hash(my_h, msg)
-
+  def fix_our_hash(my_h, msg)
     # This is where we fix systematic issues with data. my_h is a
     # hash.
     
@@ -267,12 +275,17 @@ class Ss_converter
       my_h['container'] = ""
     end
     
-    deprecated_keys = ['c0x level','collection date', 'acqinfo']
-    deprecated_keys.each { |dkey|
-      if my_h.has_key?(dkey)
-        print("Error: have deprecated column \'#{dkey}\' msg: #{msg}\n")
-      end
-    }
+    if ! @quiet_flag
+      deprecated_keys = ['c0x level','collection date', 'acqinfo']
+      deprecated_keys.each { |dkey|
+        if my_h.has_key?(dkey) && ! @dk_flags.has_key?(dkey)
+          @dk_flags[dkey] = 1
+          tmp_msg = "Warning: have deprecated column \'#{dkey}\' msg: #{msg}"
+          print "#{tmp_msg}\n"
+          @mdo.set_message(tmp_msg, true)
+        end
+      }
+    end
 
     # If c_level is not 'series', set a flag that will be used in
     # the .erb to remove the label attribute.
@@ -303,9 +316,9 @@ class Ss_converter
     # using character references.
     
     # It escapes 3 characters:
-    #       ’&’ to ’&amp;’
-    #       ’<’ to ’&lt;’
-    #       ’>’ to ’&gt;’
+    #       '&' to '&amp;'
+    #       '<' to '&lt;'
+    #       '>' to '&gt;'
     #  Escape.html_text("abc") #=> "abc"
     #  Escape.html_text("a & b < c > d") #=> "a &amp; b &lt; c &gt; d"
     
@@ -321,7 +334,7 @@ class Ss_converter
     return my_h
   end
 
-  def self.unintegerize(ivar)
+  def unintegerize(ivar)
     ivar = ivar.to_s;
     # If ivar contains all digits, or digits and dot followed by a zero
     # then run it through sprintf to convert to string form as an integer.
@@ -384,8 +397,6 @@ class Msg_dohicky
     
     # If the db doesn't exist, create it.
 
-    print "trying to open: #{@fn}\n"
-
     if (! File.size?(@fn))
       db = SQLite3::Database.new(@fn)
       db.busy_timeout=1000 # milliseconds?
@@ -397,8 +408,8 @@ class Msg_dohicky
     end
   end
   
-  # Save a message for a given user. If flag is false, remove all old
-  # messages. True to add a new message record.
+  # Save a message for a given user. If flag (concat_flag) is false,
+  # remove all old messages. True to add, concat a new message record.
   
   def set_message(str,flag)
     db = SQLite3::Database.new(@fn)
@@ -427,7 +438,7 @@ class Msg_dohicky
     db = SQLite3::Database.new(@fn)
     db.busy_timeout=1000 # milliseconds?
     db.transaction(:immediate)
-    stmt = db.prepare("select msg_text from msg where user_id = ? order by id")
+    stmt = db.prepare("select user_id,msg_text from msg where user_id = ? order by id")
     ps = Proc_sql.new();
     stmt.execute(@user_id){ |rs|
       ps.chew(rs)
