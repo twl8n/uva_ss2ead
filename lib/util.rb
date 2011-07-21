@@ -5,13 +5,18 @@ require 'csv'
 require 'roo'
 require 'find'
 require 'sqlite3'
-require 'escape'
+# Buggy don't use. Incorrectly changes &#x2013; to &amp;#x2013;
+# require 'escape'
 
 load File.join(File.dirname(__FILE__),'../config/configure.rb')
 
 class Ss_converter
 
   def initialize(file, mdo, quiet_flag)
+
+    # quiet_flag controls whether or not we get all the "deprecated
+    # column" messages.
+
     @file = file
     @mdo = mdo
     @dk_flags = Hash.new
@@ -38,31 +43,43 @@ class Ss_converter
     xx = 0
     while xx < loh.size
       href = loh[xx]
+      href['yy'] = xx
       cox = href['component']
+
+      # Increment not before we forget. Do not use xx below this line.
+      xx += 1
+
       if (cox.to_i < 1)
-        msg = "Error: Row #{xx+1} must have a valid >= 1 component"
+        msg = "Warning: Row #{xx+1} of #@file must have a valid >= 1 component. Skipping."
         print "#{msg}\n"
         @mdo.set_message(msg, true)
-        return [false,""]
-      end
-      href['content'] = ""
-      href['yy'] = xx
-      
-      # Always try to prune the stack. Always push the new hash ref onto
-      # the stack. Hash refs will stay on the stack as long as the depth
-      # increases. As soon as depth decreases or is the same, the stack
-      # is pruned. The last href on the stack always accumulates results.
+        # We don't want to return on empty records. This sanity check
+        # could get more specific, but mostly just issue a warning and
+        # not do anything more on this record. Do not simply "next"
+        # here because there could be other stuff after this
+        # statement. (There isn't because by breaking structured
+        # programming tennets I created a bug.)  Core principles of
+        # structured progamming apply here.
 
-      # The template requires vars content, old_href.
+        # return [false,""]
+      else
+        href['content'] = ""
+        
+        # Always try to prune the stack. Always push the new hash ref onto
+        # the stack. Hash refs will stay on the stack as long as the depth
+        # increases. As soon as depth decreases or is the same, the stack
+        # is pruned. The last href on the stack always accumulates results.
 
-      while cox.to_i <= stack.last['component'].to_i
-        old_href = stack.pop()
-        content = old_href['content']
-        var = cox_t.result(binding())
-        stack.last['content'].concat( var )
+        # The template requires vars content, old_href.
+
+        while cox.to_i <= stack.last['component'].to_i
+          old_href = stack.pop()
+          content = old_href['content']
+          var = cox_t.result(binding())
+          stack.last['content'].concat( var )
+        end
+        stack.push(href)
       end
-      stack.push(href)
-      xx += 1
     end
 
     while stack.size > 1
@@ -135,6 +152,9 @@ class Ss_converter
   end
 
   def self.dumploh(loh, label, names)
+
+    # We need an array names because hash keys are not ordered.
+
     xx = 0
     max_nsize = 0
     names.each { |item|
@@ -142,6 +162,8 @@ class Ss_converter
         max_nsize = item.size
       end
     }
+
+    # print "mn: #{max_nsize} ls: #{loh.size}\n"
     
     while xx < loh.size
       href = loh[xx]
@@ -173,6 +195,7 @@ class Ss_converter
   def file2loh()
     file = @file
     if ! @quiet_flag
+      print "working on #{file}\n"
       @mdo.set_message("working on #{file}", true)
     end
     message = ""
@@ -181,57 +204,64 @@ class Ss_converter
     coll_hr = Hash.new
     data = []
     if file.match(/\.csv/i)
-      ss = CSV.open(file, 'r')
-      while (row = ss.first()) 
-        data.push(row)
-      end
-    elsif file.match(/\.xlsx/i)
-      ss = Excelx.new(file)
-      
-      # http://roo.rubyforge.org/rdoc/index.html
-      if ss.sheets.length > 1
-        # If we have a second sheet, find out how many rows, then
-        # concat each row of sheet[1] onto the corresponding row of
-        # sheet[0].
-        max_row = ss.last_row(sheet=ss.sheets[0])
-        if ss.last_row(sheet=ss.sheets[1]) > max_row
-          max_row = ss.last_row(sheet=ss.sheets[1])
-        end
-        for row_num in 1..max_row
-          temp_row = ss.row(row_num, sheet=ss.sheets[0])
-          temp_row.concat(ss.row(row_num, sheet=ss.sheets[1]))
-          data.push(temp_row)
-        end
-      else
-        for row_num in 1..ss.last_row()
-          data.push(ss.row(row_num))
-        end
-      end
+      print "Error: CSV file #{file} not supported\n"
+      exit;
     end
-
-    # Headers in [0] (row 1), collection data in [1] (row 2), finding
-    # aid starts in [2] (row 3)
-
-    names = data[0]
-    names = fix_col_names(names)
+    if ! file.match(/\.xlsx/i)
+      print "Error: file #{file} supported\n"
+      exit;
+    end
+    ss = Excelx.new(file)
+      
+    # http://roo.rubyforge.org/rdoc/index.html
     
+    # We must have 2 sheets.
+    
+    # We must have at least 2 rows: column names and a row of data. It is
+    # possible (I suppose) that the data row is all empty.
+    max_row = 2
+    if ss.last_row(sheet=ss.sheets[1]) > max_row
+      max_row = ss.last_row(sheet=ss.sheets[1])
+    end
+    
+    # Headers in row 1 of both sheets. Collection data in sheet[0] row
+    # 2. Component data on sheet[1] starting in row 2.
+
+    coll_names = ss.row(1, sheet=ss.sheets[0])
+    coll_names = fix_col_names(coll_names)
+
+    cont_names = ss.row(1, sheet=ss.sheets[1])
+    cont_names = fix_col_names(cont_names)
+    
+    all_names = []
+    all_names.concat(coll_names)
+    all_names.concat(cont_names)
+
     # Populate coll_hr the collection hash ref (actually a hash, but I
     # like "hr" for historical reasons).
 
-    coll_data_row = 1
-    data[coll_data_row].each_index { |col_num|
-      if names[col_num] == 'component'
-        break
-      end
-      coll_hr[names[col_num]] = data[coll_data_row][col_num]
+    # coll_data_row = 1
+    # data[coll_data_row].each_index { |col_num|
+    #   if names[col_num] == 'component'
+    #     break
+    #   end
+    #   coll_hr[names[col_num]] = data[coll_data_row][col_num]
+    #   print "ch: #{coll_hr[names[col_num]]}\n"
+    # }
+
+    ss.row(2, sheet=ss.sheets[0]).each_index { |col_num|
+      coll_hr[coll_names[col_num]] = ss.row(2, sheet=ss.sheets[0])[col_num]
     }
+
     coll_hr = fix_our_hash(coll_hr, "coll_hr: #{file}")
 
-    for xx_dex in 2..(data.size-1)
+    # for xx_dex in 2..(data.size-1)
+    for xx_dex in 2..(max_row)
       rh = Hash.new()
-      row = data[xx_dex]
+      # row = data[xx_dex]
+      row = ss.row(xx_dex, sheet=ss.sheets[1])
       row.each_index { |col_num|
-        rh[names[col_num]] = row[col_num]
+        rh[cont_names[col_num]] = row[col_num]
       }
       rh = fix_our_hash(rh, "rh: #{file}")
       if ! cm_flag &&
@@ -240,17 +270,27 @@ class Ss_converter
         cm_flag = true
         message.concat("#{rh['num']} containter value \"#{rh['container']}\" not in list\n")
       end
+      # print "rh: #{rh}\n"
       loh.push(rh)
     end
     # dumploh(loh, "pre", names)
-    return [loh, coll_hr, message, names]
+    # print "msg: #{message}\n"
+    return [loh, coll_hr, message, all_names]
   end
 
   def newline_to_p(var)
     # I'm not sure the .to_s is sensible. Only strings should be
     # passed in here, but we'll force .to_s just in case.
+
+    # Double new is <p>, but the fields we're talking about already
+    # have <p>, so we actually use "closing p newline opening p".
+
+    # Singles are replaced using a negative look ahead assertion so we
+    # skip the newlines we just added before <p> tags.
+
     if ! var.to_s.empty?
-      var = var.to_s.gsub(/\n+/ms, "<\/p>\n<p>")
+      var = var.to_s.gsub(/\n{2}/ms, "<\/p>\n<p>")
+      var = var.to_s.gsub(/\n(?!<p>)/ms, "<br/>")
     end
     return var
   end
@@ -301,15 +341,6 @@ class Ss_converter
       my_h['container_flag'] = false
     end
 
-    my_h['bioghist'] = newline_to_p(my_h['bioghist'])
-    my_h['guide_scope'] = newline_to_p(my_h['guide_scope'])
-    my_h['access_restrict'] = newline_to_p(my_h['access_restrict'])
-    my_h['use_restrict']  = newline_to_p(my_h['use_restrict'])
-    my_h['process_info']  = newline_to_p(my_h['process_info'])
-    my_h['related_mats']  = newline_to_p(my_h['related_mats'])
-    my_h['arrangement']  = newline_to_p(my_h['arrangement'])
-    my_h['scopecontent']  = newline_to_p(my_h['scopecontent'])
-
     # http://rubydoc.info/gems/escape/0.0.4/frames
 
     # Escape.html_text escapes a string appropriate for HTML text
@@ -331,6 +362,23 @@ class Ss_converter
       end
     }
       
+    # I'm pretty sure we have to put this after the Escape.html_text
+    # otherwise our conversions will be escaped.
+
+    my_h['bioghist'] = newline_to_p(my_h['bioghist'])
+    my_h['guide_scope'] = newline_to_p(my_h['guide_scope'])
+    my_h['access_restrict'] = newline_to_p(my_h['access_restrict'])
+    my_h['use_restrict']  = newline_to_p(my_h['use_restrict'])
+    my_h['process_info']  = newline_to_p(my_h['process_info'])
+    my_h['related_mats']  = newline_to_p(my_h['related_mats'])
+    my_h['arrangement']  = newline_to_p(my_h['arrangement'])
+    my_h['scopecontent']  = newline_to_p(my_h['scopecontent'])
+
+    # un-escape <list>, at least in guide_scope
+    # my_h['guide_scope'].gsub!(/&lt;list&gt;/, "<list>")
+    # my_h['guide_scope'].gsub!(/&lt;\/list&gt;/, "</list>")
+    
+
     return my_h
   end
 
@@ -403,8 +451,8 @@ class Msg_dohicky
       db.transaction(:immediate)
       sql_source = "#{msg_path}/#{Msg_schema}"
       db.execute_batch(IO.read(sql_source))
-      db.close
       db.commit
+      db.close
     end
   end
   

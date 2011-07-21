@@ -7,6 +7,8 @@ require 'erb'
 require 'roo'
 require 'find'
 
+
+
 # ss = Excelx.new("public/test.xlsx")
 ss = Excelx.new("public/ead_template.xlsx")
 puts ss.sheets[0]

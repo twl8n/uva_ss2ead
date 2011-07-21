@@ -97,6 +97,13 @@ STDOUT.sync = true
 
 @mdo = Msg_dohicky.new(get_remote_addr, Home)
 @mdo.set_message("", false)
-ssc = Ss_converter.new(ARGV[0], @mdo)
+ssc = Ss_converter.new(ARGV[0], @mdo, false)
 loh, coll_hr, msg, names = ssc.file2loh()
+
+# loh only has component data, but for the purposes of show_ss, we
+# want all the data in a single list of hash. Simply prepend the
+# coll_hr hash that has the collection data, then dumploh as usual.
+
+loh.unshift(coll_hr)
+
 Ss_converter.dumploh(loh, "pre", names)
