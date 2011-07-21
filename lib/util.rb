@@ -356,9 +356,16 @@ class Ss_converter
     # This function is not appropriate for escaping HTML element
     # attribute because quotes are not escaped.
 
+    # Roll our own escape that knows not to escape & of character
+    # entities. Use a reasonably complete, but not necessarily perfect
+    # regex for & conversion. We want to preserve any reasonable
+    # entity in the data.
+
     my_h.keys.each { |key|
       if my_h[key].class == String
-        my_h[key] = Escape.html_text(my_h[key])
+        my_h[key] = my_h[key].gsub(/\&(?![#0-9a-zA-Z]{1,20};)/,'&amp;')
+        my_h[key] = my_h[key].gsub(/</,'&lt;')
+        my_h[key] = my_h[key].gsub(/>)/,'&gt;')
       end
     }
       
