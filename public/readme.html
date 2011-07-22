@@ -66,7 +66,45 @@ address    http://ead.lib.virginia.edu/vivaead/add_con/uva-sc_address.xml
 contact    http://ead.lib.virginia.edu/vivaead/add_con/uva-sc_contact.xml
 
 
-Site-specific configuration is in
+Notes
+-----
+
+Some data coming out of the spreadsheet via the Excelx class in the
+roo gem have issues. roo is prone to change strings with digits into
+numbers. The method fix_our_hash() cleans up various problems.
+
+Cols "num", "component", and "unitdate" are converted to strings via method
+unintegerize().
+
+If col "container" is empty or undefined it is converted to a zero
+length string "". 
+
+If "c0x level" is "series", then "series_flag" is set to true,
+otherwise "series_flag" defaults to false.
+
+"container_label" is capitalized "container".
+
+"container_type" is downcase'd "container".
+
+If "container" is empty then "container_flag" is set to false,
+otherwise "container_flag" is true.
+
+The chars &, <, and > are HTML encoded. & is only encoded if it is not
+part of a character entity.
+
+Several columns have one or more newlines converted to
+"</p>\n<p>". The first opening p and final closing p are part of the
+template which accounts for why the substitution is a closing p
+newline opening p. Fields effected: bioghist, guide_scope,
+access_restrict, use_restrict, process_info, related_mats,
+arrangement, scopecontent. The method newline_to_p() performs the
+substitution.
+
+
+
+Ss_converter Methods
+--------------------
+
 
 
 

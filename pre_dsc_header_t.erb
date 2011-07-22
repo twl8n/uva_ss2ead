@@ -14,7 +14,7 @@
       <titlestmt>
         <titleproper>
           A Guide to the <%= coll_hr['titleproper'] %>
-          <date><%= coll_hr['collection_date'] %></date>
+          <date><%= coll_hr['collection date'] %></date>
         </titleproper>
         <subtitle id="sort">
           <num type="collectionnumber"><%= coll_hr['num'] %></num>
@@ -44,7 +44,7 @@
     <titlepage>
       <titleproper>
         <%= coll_hr['titleproper'] %>
-        <date><%= coll_hr['collection_date'] %></date>
+        <date><%= coll_hr['collection date'] %></date>
       </titleproper>
       <subtitle>
         A Collection in
@@ -76,7 +76,7 @@
       <unittitle label="Title" encodinganalog="245$a">
 	<%= coll_hr['titleproper'] %>
         <unitdate type="inclusive" label="Date" encodinganalog="245$f">
-	  <%= coll_hr['collection_date'] %>
+	  <%= coll_hr['collection date'] %>
 	</unitdate>
       </unittitle>
       <unitid label="Accession Number" encodinganalog="099$a">
@@ -114,11 +114,11 @@
       </userestrict>
       <prefercite encodinganalog="524$a">
         <head>Preferred Citation </head>
-        <p><%= coll_hr['titleproper'] %><% if ! coll_hr['collection_date'].to_s.empty? %> <%= coll_hr['collection_date'] %><% end %>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
+        <p><%= coll_hr['titleproper'] %><% if ! coll_hr['collection date'].to_s.empty? %> <%= coll_hr['collection date'] %><% end %>, Accession #<%= coll_hr['num'] %>, Special Collections, University of Virginia Library, Charlottesville, Va. </p>
       </prefercite>
       <acqinfo encodinganalog="541$a">
         <head>Acquisition Information </head>
-        <p><%= coll_hr['acq_info'] %></p>
+        <p><%= coll_hr['acqinfo'] %></p>
       </acqinfo>
       <processinfo>
 	<head>Processing Information</head>

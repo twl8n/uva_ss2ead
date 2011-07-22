@@ -25,7 +25,7 @@ class Ss_converter
 
   def proc_rows(loh, cox_t)
     # This method does the real work of changing a flat list (of
-    # hashes) into nested XML text. The results array is stack and
+    # hashes) into nested XML text. The results array is "stack" and
     # stack[0] is the special, final accumulator of everything that
     # happens. Each child writes into the 'content' key of the
     # parent. Each entry renders itself along with its 'content' into
@@ -53,6 +53,7 @@ class Ss_converter
         msg = "Warning: Row #{xx+1} of #@file must have a valid >= 1 component. Skipping."
         print "#{msg}\n"
         @mdo.set_message(msg, true)
+
         # We don't want to return on empty records. This sanity check
         # could get more specific, but mostly just issue a warning and
         # not do anything more on this record. Do not simply "next"
@@ -61,7 +62,6 @@ class Ss_converter
         # programming tennets I created a bug.)  Core principles of
         # structured progamming apply here.
 
-        # return [false,""]
       else
         href['content'] = ""
         
@@ -88,7 +88,6 @@ class Ss_converter
       var = cox_t.result(binding())
       stack.last['content'].concat( var )
     end
-    #abort "<dsc>#{stack.last['content']}\n</dsc>\n"
     return [true,stack.last['content']]
   end
 
@@ -153,7 +152,7 @@ class Ss_converter
 
   def self.dumploh(loh, label, names)
 
-    # We need an array names because hash keys are not ordered.
+    # We need an array "names" because hash keys are not ordered.
 
     xx = 0
     max_nsize = 0
@@ -191,7 +190,7 @@ class Ss_converter
     return names
   end
 
-
+  
   def file2loh()
     file = @file
     if ! @quiet_flag
@@ -237,18 +236,9 @@ class Ss_converter
     all_names.concat(coll_names)
     all_names.concat(cont_names)
 
-    # Populate coll_hr the collection hash ref (actually a hash, but I
-    # like "hr" for historical reasons).
-
-    # coll_data_row = 1
-    # data[coll_data_row].each_index { |col_num|
-    #   if names[col_num] == 'component'
-    #     break
-    #   end
-    #   coll_hr[names[col_num]] = data[coll_data_row][col_num]
-    #   print "ch: #{coll_hr[names[col_num]]}\n"
-    # }
-
+    # Populate coll_hr which is memnonic for "collection hash
+    # ref". (Actually a hash, but I like "hr" for historical reasons).
+    
     ss.row(2, sheet=ss.sheets[0]).each_index { |col_num|
       coll_hr[coll_names[col_num]] = ss.row(2, sheet=ss.sheets[0])[col_num]
     }
@@ -270,11 +260,10 @@ class Ss_converter
         cm_flag = true
         message.concat("#{rh['num']} containter value \"#{rh['container']}\" not in list\n")
       end
-      # print "rh: #{rh}\n"
+
       loh.push(rh)
     end
     # dumploh(loh, "pre", names)
-    # print "msg: #{message}\n"
     return [loh, coll_hr, message, all_names]
   end
 
@@ -289,8 +278,8 @@ class Ss_converter
     # skip the newlines we just added before <p> tags.
 
     if ! var.to_s.empty?
-      var = var.to_s.gsub(/\n{2}/ms, "<\/p>\n<p>")
-      var = var.to_s.gsub(/\n(?!<p>)/ms, "<br/>")
+      var = var.to_s.gsub(/\n[\n\s]*/ms, "<\/p>\n<p>")
+      # var = var.to_s.gsub(/\n(?!<p>)/ms, "<br/>")
     end
     return var
   end
@@ -302,7 +291,7 @@ class Ss_converter
     # num and component strangely convert to strings with floating
     # point values even though celltype() says they are strings. We
     # have to convert them into strings containing an
-    # integer. Oddly, other columns such as "c_level" and "guide
+    # integer. Oddly, other columns such as "c0x level" and "guide
     # date" are type "float" even though they only contain
     # strings. Either the Roo gem or Excel are confused. Regardless,
     # fix the data here.
@@ -316,20 +305,21 @@ class Ss_converter
     end
     
     if ! @quiet_flag
-      deprecated_keys = ['c0x level','collection date', 'acqinfo']
+      deprecated_keys = ['c_level','collection_date', 'acq_info']
       deprecated_keys.each { |dkey|
         if my_h.has_key?(dkey) && ! @dk_flags.has_key?(dkey)
           @dk_flags[dkey] = 1
-          tmp_msg = "Warning: have deprecated column \'#{dkey}\' msg: #{msg}"
+          tmp_msg = "Warning: have re-deprecated column \'#{dkey}\' msg: #{msg}"
           print "#{tmp_msg}\n"
           @mdo.set_message(tmp_msg, true)
         end
       }
     end
 
-    # If c_level is not 'series', set a flag that will be used in
+    # If c0x level is not 'series', set a flag that will be used in
     # the .erb to remove the label attribute.
-    if my_h['c_level'].to_s.match(/series/)
+    my_h['series_flag'] = false
+    if my_h['c0x level'].to_s.match(/series/)
       my_h['series_flag'] = true
     end
     
@@ -341,31 +331,17 @@ class Ss_converter
       my_h['container_flag'] = false
     end
 
-    # http://rubydoc.info/gems/escape/0.0.4/frames
-
-    # Escape.html_text escapes a string appropriate for HTML text
-    # using character references.
-    
-    # It escapes 3 characters:
-    #       '&' to '&amp;'
-    #       '<' to '&lt;'
-    #       '>' to '&gt;'
-    #  Escape.html_text("abc") #=> "abc"
-    #  Escape.html_text("a & b < c > d") #=> "a &amp; b &lt; c &gt; d"
-    
-    # This function is not appropriate for escaping HTML element
-    # attribute because quotes are not escaped.
-
     # Roll our own escape that knows not to escape & of character
     # entities. Use a reasonably complete, but not necessarily perfect
     # regex for & conversion. We want to preserve any reasonable
-    # entity in the data.
+    # entity in the data, but heaven only knows what entities are
+    # possible. Look into that and update the regex some time.
 
     my_h.keys.each { |key|
       if my_h[key].class == String
         my_h[key] = my_h[key].gsub(/\&(?![#0-9a-zA-Z]{1,20};)/,'&amp;')
         my_h[key] = my_h[key].gsub(/</,'&lt;')
-        my_h[key] = my_h[key].gsub(/>)/,'&gt;')
+        my_h[key] = my_h[key].gsub(/>/,'&gt;')
       end
     }
       
@@ -380,11 +356,6 @@ class Ss_converter
     my_h['related_mats']  = newline_to_p(my_h['related_mats'])
     my_h['arrangement']  = newline_to_p(my_h['arrangement'])
     my_h['scopecontent']  = newline_to_p(my_h['scopecontent'])
-
-    # un-escape <list>, at least in guide_scope
-    # my_h['guide_scope'].gsub!(/&lt;list&gt;/, "<list>")
-    # my_h['guide_scope'].gsub!(/&lt;\/list&gt;/, "</list>")
-    
 
     return my_h
   end
