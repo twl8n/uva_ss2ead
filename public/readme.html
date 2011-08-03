@@ -22,6 +22,8 @@ Table of Contents
 -----------------
 Introduction
 Change notes
+Data preparation notes
+Ss_converter Methods
 
 
 
@@ -51,7 +53,7 @@ the standard location app/views/ss_conv/.
 
 
 
-<%= dsc %> in pre_dsc_header_t.erb comes from the content hash value
+&lt;%= dsc %&gt; in pre_dsc_header_t.erb comes from the content hash value
 in the list of hashes generated during processing the spread sheet
 rows.
 
@@ -66,8 +68,8 @@ address    http://ead.lib.virginia.edu/vivaead/add_con/uva-sc_address.xml
 contact    http://ead.lib.virginia.edu/vivaead/add_con/uva-sc_contact.xml
 
 
-Notes
------
+Data preparation notes
+----------------------
 
 Some data coming out of the spreadsheet via the Excelx class in the
 roo gem have issues. roo is prone to change strings with digits into
@@ -89,11 +91,11 @@ otherwise "series_flag" defaults to false.
 If "container" is empty then "container_flag" is set to false,
 otherwise "container_flag" is true.
 
-The chars &, <, and > are HTML encoded. & is only encoded if it is not
+The chars &amp;, &lt;, and &gt; are HTML encoded. &amp; is only encoded if it is not
 part of a character entity.
 
 Several columns have one or more newlines converted to
-"</p>\n<p>". The first opening p and final closing p are part of the
+"&lt;/p&gt;\n&lt;p&gt;". The first opening p and final closing p are part of the
 template which accounts for why the substitution is a closing p
 newline opening p. Fields effected: bioghist, guide_scope,
 access_restrict, use_restrict, process_info, related_mats,
@@ -121,21 +123,21 @@ link text.
 x rename render_csv.rb to render_ss.rb, show_csv.rb to show_ss.rb
 because both can do more than just csv.
 
-x <ead id="#{coll_hr['num']}">  vui is the num. vui also occurs in file name.
+x &lt;ead id="#{coll_hr['num']}"&gt;  vui is the num. vui also occurs in file name.
 
 x show_csv.rb add printf max width formatting for name and add ability
   to read xlsx.
 
-Q If an element is empty must we render it as <empty/> or can we use
-<empty></empty> ?
+Q If an element is empty must we render it as &lt;empty/&gt; or can we use
+&lt;empty&gt;&lt;/empty&gt; ?
 
 A xmllint seems to change empty elements into the self-closing variant.
 
 x add "num" to Accession # in prefercite
 
-x fix both instances of <num> to use collection_num column
+x fix both instances of &lt;num&gt; to use collection_num column
 
-x add <head>Conents List</head> as first line of <dcs>
+x add &lt;head&gt;Conents List&lt;/head&gt; as first line of &lt;dcs&gt;
 
 x put sample input and output from "steady" ruby and nokogiri converter into ./steady/
 

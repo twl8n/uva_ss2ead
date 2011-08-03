@@ -13,10 +13,12 @@
     <physdesc><%=old_href['physdesc']%></physdesc>
   </did>
   <scopecontent>
-    <% if old_href['c_num'].to_s.empty? %>
-    <num><%= old_href['c_num'] %></num>
-    <% end %>
-    <p><%= old_href['scopecontent'] %></p>
+    <p>
+      <% if ! old_href['c_num'].to_s.empty? %>
+      Accession #<num><%= old_href['c_num'] %></num>
+      <% end %>
+      <%= old_href['scopecontent'] %>
+    </_p>
   </scopecontent>
   <arrangement>
     <p/>
